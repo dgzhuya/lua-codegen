@@ -1,13 +1,16 @@
 {
 	"name": "lua-codegen",
 	"version": "1.0.0",
-	"description": "",
+	"description": "代码生成工具",
 	"main": "index.js",
 	"scripts": {
-		"test": "tsx scripts/test.ts",
+		"test:ts": "tsx scripts/test.ts",
+		"test:js": "node scripts/test-js.js",
+		"build:js": "tsx scripts/build.ts",
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
 	"files": [
+		"sources",
 		"dist",
 		"pkg",
 		"bin",
@@ -19,10 +22,14 @@
 	"devDependencies": {
 		"@types/node": "^20.14.2",
 		"@types/shelljs": "^0.8.15",
+		"esbuild": "^0.21.5",
+		"esbuild-plugin-d.ts": "^1.2.3",
 		"tsx": "^4.15.1",
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
+		"@biuxiu/template": "^1.1.7",
+		"module-alias": "^2.2.3",
 		"shelljs": "^0.8.5"
 	}
 }

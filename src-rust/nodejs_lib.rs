@@ -5,7 +5,7 @@ use neige_lua::LuaValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
-#[wasm_bindgen(module = "src/libs/index.ts")]
+#[wasm_bindgen(module = "@dist/libs.js")]
 extern "C" {
     pub fn genWebCode(name: &str, val: &JsValue);
     pub fn genApiCode(name: &str);
