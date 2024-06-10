@@ -1,10 +1,28 @@
 {
 	"compilerOptions": {
-		"baseUrl": "./",
+		"module": "ESNext",
+		"target": "esnext",
+		"resolveJsonModule": true,
+		"declaration": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictPropertyInitialization": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"esModuleInterop": true,
+		"preserveConstEnums": true,
+		"moduleResolution": "node",
+		"baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"]
+			"@dist/*": ["dist/*"]
 		}
 	},
-	"include": ["btpl-env.d.ts", "src", "scripts", "bin"]
+	"include": ["btpl-env.d.ts", "src", "scripts"]
 }
 
