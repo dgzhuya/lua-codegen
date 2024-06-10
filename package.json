@@ -1,0 +1,29 @@
+{
+	"name": "lua-codegen",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "tsx scripts/test.ts",
+		"build:wasm": "wasm-pack build --target nodejs --release"
+	},
+	"files": [
+		"dist",
+		"pkg",
+		"bin",
+		"README.md"
+	],
+	"keywords": [],
+	"author": "dgzhuya",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^20.14.2",
+		"@types/shelljs": "^0.8.15",
+		"tsx": "^4.15.1",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"shelljs": "^0.8.5"
+	}
+}
+

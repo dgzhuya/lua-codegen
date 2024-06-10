@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		}
+	},
+	"include": ["btpl-env.d.ts", "src", "scripts", "bin"]
+}
+
