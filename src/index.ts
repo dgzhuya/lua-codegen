@@ -1,4 +1,4 @@
-import { compileToByte } from '@/compile'
+import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
 
