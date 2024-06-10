@@ -28,9 +28,8 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@biuxiu/template": "^1.1.7",
+		"@biuxiu/template": "^1.1.8",
 		"module-alias": "^2.2.3",
 		"shelljs": "^0.8.5"
 	}
 }
-
