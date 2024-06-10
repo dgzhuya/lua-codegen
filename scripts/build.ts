@@ -21,7 +21,6 @@ export const getTSFile = (path: string) => {
 	}
 	return entrys
 }
-
 build({
 	entryPoints: getTSFile(join(rootPath, 'src')),
 	outdir: join(rootPath, 'dist'),
@@ -39,5 +38,7 @@ build({
 		console.log('>>>add banner success')
 	})
 	.catch(err => {
-		console.log('err: ', err)
+		console.log('>>>build error start')
+		console.log(err)
+		console.log('>>>end')
 	})
