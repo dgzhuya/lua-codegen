@@ -1,7 +1,10 @@
 import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
+import { setBasePath } from '@biuxiu/template'
+import { resolve } from 'path'
 
+setBasePath(resolve(__dirname, '..'))
 export async function runLua(filePath: string) {
 	if (existsSync(filePath)) {
 		try {
