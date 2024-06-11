@@ -4,3 +4,4 @@ pkg/
 build/
 dist/
 .DS_Store
+test_*
