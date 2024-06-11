@@ -2,10 +2,11 @@ import '@biuxiu/template'
 
 declare module '@biuxiu/template' {
 	interface TemplateMap {
-		service: Service
+		'create-dto': CreateDto
 	}
 
-	interface Service {
+	interface CreateDto {
 		name: string
+		content: string
 	}
 }
