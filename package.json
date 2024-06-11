@@ -4,9 +4,9 @@
 	"description": "代码生成工具",
 	"main": "index.js",
 	"scripts": {
+		"build": "tsx scripts/build.ts",
 		"test:dev": "tsx scripts/dev.ts",
 		"test:prod": "node scripts/prod.js",
-		"build:js": "tsx scripts/build.ts",
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
 	"files": [
