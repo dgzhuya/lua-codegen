@@ -1,1 +1,1 @@
-NodeJs.genApiCode('NodeJs')
+NodeJs.genApiCode('test_module')
