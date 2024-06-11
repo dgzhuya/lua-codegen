@@ -20,7 +20,7 @@
 		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
-			"@dist/*": ["dist/*"]
+			"@/*": ["src/*"]
 		}
 	},
 	"include": ["btpl-env.d.ts", "src", "scripts"]
