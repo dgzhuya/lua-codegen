@@ -27,3 +27,8 @@ function NodeJs.genWebCode(route, tbl, form, name) end
 ---
 --- @param name string 模块名
 function NodeJs.genApiCode(name) end
+
+--- 打印输出
+---
+--- @param info string 打印的信息
+function logger(info) end

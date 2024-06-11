@@ -14,3 +14,7 @@ export function genApiCode(name: string) {
 export function genWebCode(name: string, val: any) {
 	console.log('name=', name, ',value=', val)
 }
+
+export function printToNode(info: string) {
+	console.log(info)
+}
