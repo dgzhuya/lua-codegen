@@ -1,11 +1,9 @@
 import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
-import { setBasePath } from '@biuxiu/template'
-import { resolve } from 'path'
+import { setConfig } from './config'
 
-setBasePath(resolve(__dirname, '..'))
-export async function runLua(filePath: string) {
+async function runLua(filePath: string) {
 	if (existsSync(filePath)) {
 		try {
 			const data = await compileToByte(filePath)
@@ -17,3 +15,5 @@ export async function runLua(filePath: string) {
 		console.error(`${filePath}文件存在`)
 	}
 }
+
+export { runLua, setConfig }

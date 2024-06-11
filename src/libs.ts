@@ -1,8 +1,14 @@
-import { renderTemplateSync } from '@biuxiu/template'
+import { join } from 'path'
+import { getApiDir } from './config'
+import { existsSync, mkdirSync } from 'fs'
+import { genDtoCode } from './codegen'
 
 export function genApiCode(name: string) {
-	console.log('name: ', name)
-	console.log('source: ', renderTemplateSync('service', { name }))
+	const basePath = join(getApiDir(), name)
+	if (!existsSync(basePath)) {
+		mkdirSync(basePath)
+	}
+	genDtoCode(basePath, name)
 }
 
 export function genWebCode(name: string, val: any) {
