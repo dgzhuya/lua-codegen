@@ -10,10 +10,10 @@
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
 	"files": [
-		"sources",
+		"bin",
 		"dist",
 		"pkg",
-		"bin",
+		"sources",
 		"README.md"
 	],
 	"keywords": [],
