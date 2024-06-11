@@ -31,7 +31,7 @@ build({
 })
 	.then(() => {
 		console.log('>>>build success')
-		const banner = `require('module-alias/register');require('module-alias').addAliases({'@dist': require('path').resolve(__dirname)});\n`
+		const banner = `require('module-alias/register');require('module-alias').addAliases({'@': require('path').resolve(__dirname)});\n`
 		const path = resolve(rootPath, 'dist/index.js')
 		const content = readFileSync(path, 'utf-8')
 		writeFileSync(path, banner + content)
