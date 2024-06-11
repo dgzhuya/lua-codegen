@@ -4,8 +4,8 @@
 	"description": "代码生成工具",
 	"main": "index.js",
 	"scripts": {
-		"test:ts": "tsx scripts/test.ts",
-		"test:js": "node scripts/test-js.js",
+		"test:dev": "tsx scripts/dev.ts",
+		"test:prod": "node scripts/prod.js",
 		"build:js": "tsx scripts/build.ts",
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
@@ -28,8 +28,10 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@biuxiu/template": "^1.1.8",
+		"@biuxiu/template": "^1.1.9",
 		"module-alias": "^2.2.3",
+		"prettier": "^3.3.2",
 		"shelljs": "^0.8.5"
 	}
 }
+
