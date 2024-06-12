@@ -1,20 +1,31 @@
 mod nodejs_lib;
 
+use gloo_utils::format::JsValueSerdeExt;
 use neige_lua::{
     api::{CallApi, LuaApi, PushApi},
     state::LuaState,
+    LuaValue,
 };
 use nodejs_lib::LuaNodeLib;
-use wasm_bindgen::prelude::wasm_bindgen;
+use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 #[wasm_bindgen(module = "@/libs")]
 extern "C" {
-    pub fn printToNode(name: &str);
+    pub fn printToNode(name: &JsValue);
 }
 
 fn logger(ls: &mut dyn LuaApi) -> usize {
-    let info = ls.to_string(-1);
-    printToNode(&info);
+    for i in 1..=ls.get_top() {
+        if ls.is_lua_tbl(i) {
+            let val = ls.to_lua_tbl(i).unwrap();
+            let tbl = JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null());
+            printToNode(&tbl)
+        } else if ls.is_string(i) {
+            printToNode(&JsValue::from_str(&ls.to_string(i)));
+        } else if ls.is_boolean(i) {
+            printToNode(&JsValue::from_bool(ls.to_boolean(i)))
+        }
+    }
     0
 }
 
