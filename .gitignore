@@ -4,4 +4,5 @@ pkg/
 build/
 dist/
 .DS_Store
-test_*
+test*/
+student/
