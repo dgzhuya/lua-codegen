@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { getApiDir } from './config'
 import { existsSync, mkdirSync } from 'fs'
-import { genDtoCode } from './codegen'
+import { genDtoCode, genEntity } from './codegen'
 
 export function genApiCode(name: string) {
 	const basePath = join(getApiDir(), name)
@@ -9,6 +9,7 @@ export function genApiCode(name: string) {
 		mkdirSync(basePath)
 	}
 	genDtoCode(basePath, name)
+	genEntity(basePath, name)
 }
 
 export function genWebCode(name: string, val: any) {
