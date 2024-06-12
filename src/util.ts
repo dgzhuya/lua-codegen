@@ -6,11 +6,15 @@ export const writeFormatFile = async (
 	content: string,
 	isJson = false
 ) => {
-	const file = await resolveConfigFile(filePath)
-	const config = file ? await resolveConfig(file) : {}
-	const formatText = await format(content, {
-		...config,
-		parser: isJson ? 'json' : 'typescript'
-	})
-	writeFile(filePath, formatText)
+	try {
+		const file = await resolveConfigFile(filePath)
+		const config = file ? await resolveConfig(file) : {}
+		const formatText = await format(content, {
+			...config,
+			parser: isJson ? 'json' : 'typescript'
+		})
+		writeFile(filePath, formatText)
+	} catch (error) {
+		console.log(error)
+	}
 }
