@@ -29,10 +29,9 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@biuxiu/template": "^1.2.0",
+		"@biuxiu/template": "^1.2.2",
 		"module-alias": "^2.2.3",
 		"prettier": "^3.3.2",
 		"shelljs": "^0.8.5"
 	}
 }
-
