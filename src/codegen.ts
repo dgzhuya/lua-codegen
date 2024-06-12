@@ -13,5 +13,10 @@ export const genDtoCode = async (path = '', moduleName = '') => {
 		name: moduleName,
 		content: 'name:string'
 	})
+	const updateDtoPath = join(dtoPath, `update-${moduleName}.dto.ts`)
+	const updateDtoStr = await renderTemplate('update-dto', {
+		name: moduleName
+	})
 	writeFormatFile(createDtoPath, createDtoStr)
+	writeFormatFile(updateDtoPath, updateDtoStr)
 }
