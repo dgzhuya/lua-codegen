@@ -6,7 +6,7 @@
 	"scripts": {
 		"test:dev": "tsx scripts/dev.ts",
 		"test:prod": "node scripts/prod.js",
-		"clear:module": "tsx scripts/clear.ts name=test_module",
+		"clear:module": "tsx scripts/clear.ts name=student",
 		"build:script": "tsx scripts/build.ts",
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
@@ -29,7 +29,7 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@biuxiu/template": "^1.1.9",
+		"@biuxiu/template": "^1.2.0",
 		"module-alias": "^2.2.3",
 		"prettier": "^3.3.2",
 		"shelljs": "^0.8.5"

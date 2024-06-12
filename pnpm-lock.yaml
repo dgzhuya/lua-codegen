@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@biuxiu/template':
-        specifier: ^1.1.9
-        version: 1.1.9
+        specifier: ^1.2.0
+        version: 1.2.0
       module-alias:
         specifier: ^2.2.3
         version: 2.2.3
@@ -42,8 +42,8 @@ importers:
 
 packages:
 
-  '@biuxiu/template@1.1.9':
-    resolution: {integrity: sha512-HOFvUS7nfqjO6JrYZn+UmA20dHZ/ehnBluGCY1c+Du9AfZ3gKPfYTcNlgLIwpIHUE05DtpAhhZHVyN3u/XNoTQ==}
+  '@biuxiu/template@1.2.0':
+    resolution: {integrity: sha512-ur2QPz4Jc5TIHi/1vT64v603NNP/vtBaUXLKqc9bkZy2NAgnxB5zbPa8R25CQK1ENQZcvISdderbX15kupo1JQ==}
     hasBin: true
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -428,7 +428,7 @@ packages:
 
 snapshots:
 
-  '@biuxiu/template@1.1.9':
+  '@biuxiu/template@1.2.0':
     dependencies:
       prettier: 3.3.2
       ts-morph: 21.0.1
