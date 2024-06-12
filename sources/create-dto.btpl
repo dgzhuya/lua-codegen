@@ -1,3 +1,3 @@
-export class Create{%name%}Dto {
+{%import_info%}export class Create{%up@name%}Dto {
     {%content%}
 }
