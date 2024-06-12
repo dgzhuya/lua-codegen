@@ -1,0 +1,38 @@
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Create{%up@name%}Dto } from './dto/create-{%name%}.dto'
+import { Update{%up@name%}Dto } from './dto/update-{%name%}.dto'
+import { {%up@name%}Entity } from './entities/{%name%}.entity'
+
+@Injectable()
+export class {%up@name%}Service {
+	constructor(@InjectRepository({%up@name%}Entity) private readonly {%name%}Repository: Repository<{%up@name%}Entity>) {}
+
+	create(create{%up@name%}Dto: Create{%up@name%}Dto) {
+		return this.{%name%}Repository.save(create{%up@name%}Dto)
+	}
+
+	async delete(id: number) {
+		return this.{%name%}Repository.softDelete(id)
+	}
+
+	update(id: number, update{%up@name%}Dto: Update{%up@name%}Dto) {
+		return this.{%name%}Repository.update(id, update{%up@name%}Dto)
+	}
+
+	query(id: number) {
+		return this.{%name%}Repository.findOneBy({ id })
+	}
+
+	async table(skip?: number, take?: number, search?: string) {
+		if (skip === undefined || take === undefined) return this.{%name%}Repository.find()
+
+		let queryBuilder = this.{%name%}Repository.createQueryBuilder('{%name%}')
+		if (search) {
+			queryBuilder = queryBuilder.where('{%name%}.id like :search', { search: `%${search}%` })
+		}
+		const [list, total] = await queryBuilder.skip(skip).take(take).getManyAndCount()
+		return { list, total }
+	}
+}
