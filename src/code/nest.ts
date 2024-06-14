@@ -1,9 +1,9 @@
-import xiu from './render'
+import xiu from '@/render'
 import { join } from 'path'
-import { writeFormatFile } from './util'
+import { writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
-import { DTOSchema } from './types'
-import { DTOFromat } from './format/dto'
+import { DTOSchema } from '@/types'
+import { DTOFromat } from '@/format/dto'
 
 export class GenApi {
 	#path: string
