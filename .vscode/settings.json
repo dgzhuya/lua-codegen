@@ -1,3 +1,6 @@
 {
-	"Lua.workspace.library": ["scripts/lua/meta/node-types.lua"]
+	"Lua.workspace.library": [
+		"scripts/lua/meta/nest-types.lua",
+		"scripts/lua/meta/vue-type.lua"
+	]
 }

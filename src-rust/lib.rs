@@ -1,4 +1,5 @@
-mod nodejs_lib;
+mod nestjs_lib;
+mod vuejs_lib;
 
 use gloo_utils::format::JsValueSerdeExt;
 use neige_lua::{
@@ -6,10 +7,11 @@ use neige_lua::{
     state::LuaState,
     LuaValue,
 };
-use nodejs_lib::LuaNodeLib;
+use nestjs_lib::LuaNestLib;
+use vuejs_lib::LuaVueLib;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-#[wasm_bindgen(module = "@/libs")]
+#[wasm_bindgen(module = "@/libs/nest-lib")]
 extern "C" {
     pub fn printToNode(name: &JsValue);
 }
@@ -35,7 +37,8 @@ pub fn run(data: &[u8], file_name: &str) {
     let mut state = LuaState::new();
     state.aux_lib();
     state.register("logger", logger);
-    state.nodejs_lib();
+    state.nestjs_lib();
+    state.vuejs_lib();
     state.load(data.to_vec(), file_name, "bt");
     state.call(0, 0)
 }

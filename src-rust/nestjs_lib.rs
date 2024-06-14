@@ -5,10 +5,31 @@ use neige_lua::LuaValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
-#[wasm_bindgen(module = "@/libs")]
+#[wasm_bindgen(module = "@/libs/nest-lib")]
 extern "C" {
     pub fn genWebCode(name: &str, val: &JsValue);
     pub fn genApiCode(name: &str, val: &JsValue);
+}
+
+pub trait LuaNestLib {
+    fn nestjs_lib(&mut self);
+}
+
+impl LuaNestLib for LuaState {
+    fn nestjs_lib(&mut self) {
+        self.create_table(0, 1);
+        self.push_rust_fn(gen_api_code);
+        self.set_field(-2, "genApiCode");
+        self.push_rust_fn(create_limit_rule);
+        self.set_field(-2, "createLimitRule");
+        self.push_rust_fn(create_simple_rule);
+        self.set_field(-2, "createSimpleRule");
+        self.push_rust_fn(create_dto_rule);
+        self.set_field(-2, "createDtoRule");
+        self.push_rust_fn(crete_dto_field);
+        self.set_field(-2, "creteDtoField");
+        self.set_global("NestJs");
+    }
 }
 
 fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
@@ -20,18 +41,6 @@ fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
         JsValue::null()
     };
     genApiCode(&name, &dto);
-    0
-}
-
-fn create_web_code(ls: &mut dyn LuaApi) -> usize {
-    let info = ls.to_string(-2);
-    let route = if ls.is_lua_tbl(-1) {
-        let val = ls.to_lua_tbl(-1).unwrap();
-        JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
-    } else {
-        JsValue::null()
-    };
-    genWebCode(&info, &route);
     0
 }
 
@@ -103,27 +112,4 @@ fn crete_dto_field(ls: &mut dyn LuaApi) -> usize {
         ls.set_field(-2, "rule")
     }
     1
-}
-
-pub trait LuaNodeLib {
-    fn nodejs_lib(&mut self);
-}
-
-impl LuaNodeLib for LuaState {
-    fn nodejs_lib(&mut self) {
-        self.create_table(0, 1);
-        self.push_rust_fn(create_web_code);
-        self.set_field(-2, "genFontCode");
-        self.push_rust_fn(gen_api_code);
-        self.set_field(-2, "genApiCode");
-        self.push_rust_fn(create_limit_rule);
-        self.set_field(-2, "createLimitRule");
-        self.push_rust_fn(create_simple_rule);
-        self.set_field(-2, "createSimpleRule");
-        self.push_rust_fn(create_dto_rule);
-        self.set_field(-2, "createDtoRule");
-        self.push_rust_fn(crete_dto_field);
-        self.set_field(-2, "creteDtoField");
-        self.set_global("NodeJs");
-    }
 }
