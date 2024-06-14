@@ -2,6 +2,8 @@ import xiu from './render'
 import { join } from 'path'
 import { writeFormatFile } from './util'
 import { existsSync, mkdirSync } from 'fs'
+import { DTOSchema } from './types'
+import { DTOFromat } from './format/dto'
 
 export class GenApi {
 	#path: string
@@ -11,27 +13,19 @@ export class GenApi {
 		this.#path = path
 	}
 
-	gen() {
-		this.#genDto()
-		this.#genEntity()
-		this.#genController()
-		this.#genMoudle()
-		this.#genService()
-	}
-
-	async #genService() {
+	async genService() {
 		const servicePath = join(this.#path, `${this.#name}.service.ts`)
 		const serviceStr = await xiu.render('service', { name: this.#name })
 		writeFormatFile(servicePath, serviceStr)
 	}
 
-	async #genMoudle() {
+	async genModule() {
 		const modulePath = join(this.#path, `${this.#name}.module.ts`)
 		const moduleStr = await xiu.render('module', { name: this.#name })
 		writeFormatFile(modulePath, moduleStr)
 	}
 
-	async #genController() {
+	async genController() {
 		const controllerPath = join(this.#path, `${this.#name}.controller.ts`)
 		const controllerStr = await xiu.render('controller', {
 			name: this.#name
@@ -39,7 +33,7 @@ export class GenApi {
 		writeFormatFile(controllerPath, controllerStr)
 	}
 
-	async #genEntity() {
+	async genEntity() {
 		const entityDir = join(this.#path, 'entities')
 		if (!existsSync(entityDir)) {
 			mkdirSync(entityDir)
@@ -51,18 +45,18 @@ export class GenApi {
 		writeFormatFile(entityPath, entityStr)
 	}
 
-	async #genDto() {
+	async genDto(dto: DTOSchema[]) {
 		const dtoPath = join(this.#path, 'dto')
 		if (!existsSync(dtoPath)) {
 			mkdirSync(dtoPath)
 		}
 		const createDtoPath = join(dtoPath, `create-${this.#name}.dto.ts`)
 		const updateDtoPath = join(dtoPath, `update-${this.#name}.dto.ts`)
+		const [importInfo, content] = new DTOFromat(dto).format()
 		const createDtoStr = await xiu.render('create-dto', {
-			importInfo:
-				"import { IsNotEmpty, IsOptional, Length, MaxLength } from 'class-validator'\n",
+			importInfo,
 			name: this.#name,
-			content: 'name:string'
+			content
 		})
 		const updateDtoStr = await xiu.render('update-dto', {
 			name: this.#name
