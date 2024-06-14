@@ -88,6 +88,23 @@ fn create_dto_rule(ls: &mut dyn LuaApi) -> usize {
     1
 }
 
+fn crete_dto_field(ls: &mut dyn LuaApi) -> usize {
+    ls.create_table(3, 0);
+    if ls.is_string(-4) {
+        ls.push_value(-4);
+        ls.set_field(-2, "key")
+    }
+    if ls.is_string(-3) {
+        ls.push_value(-3);
+        ls.set_field(-2, "type")
+    }
+    if ls.is_lua_tbl(-2) {
+        ls.push_value(-2);
+        ls.set_field(-2, "rule")
+    }
+    1
+}
+
 pub trait LuaNodeLib {
     fn nodejs_lib(&mut self);
 }
@@ -105,6 +122,8 @@ impl LuaNodeLib for LuaState {
         self.set_field(-2, "createSimpleRule");
         self.push_rust_fn(create_dto_rule);
         self.set_field(-2, "createDtoRule");
+        self.push_rust_fn(crete_dto_field);
+        self.set_field(-2, "creteDtoField");
         self.set_global("NodeJs");
     }
 }

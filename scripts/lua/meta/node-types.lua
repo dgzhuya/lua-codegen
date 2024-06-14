@@ -49,9 +49,14 @@ function NodeJs.createSimpleRule(key, msg) end
 function NodeJs.createDtoRule(...) end
 
 --- @class DTOSchema
---- @field key string
---- @field type 'string' | 'number' | 'bool'
---- @field rule DTORule
+
+--- 生成DTO字段信息
+---
+---@param key string 字段名
+---@param type 'string' | 'number' | 'bool' 字段类型
+---@param rule DTORule 字段规则
+---@return DTOSchema
+function NodeJs.creteDtoField(key, type, rule) end
 
 --- 创建后端代码
 ---
