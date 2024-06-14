@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { getApiDir } from '@/config'
 import { existsSync, mkdirSync } from 'fs'
-import { GenApi } from '@/codegen'
+import { GenApi } from '@/code/nest'
 import { DTOSchema } from '@/types'
 
 export function genApiCode(name: string, dto: DTOSchema[]) {
