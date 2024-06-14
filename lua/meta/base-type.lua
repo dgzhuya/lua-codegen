@@ -1,3 +1,5 @@
+--- @meta Base
+
 --- @alias None 'none'
 
 --- 打印输出

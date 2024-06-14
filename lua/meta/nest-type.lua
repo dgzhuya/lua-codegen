@@ -1,4 +1,4 @@
---- @meta nodejs
+--- @meta NestJs
 
 --- @class NestJs
 NestJs = {}
