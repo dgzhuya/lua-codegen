@@ -16,7 +16,3 @@ export function genApiCode(name: string, dto: DTOSchema[]) {
 	api.genService()
 	api.genController()
 }
-
-export function printToNode(info: any) {
-	console.log(info)
-}

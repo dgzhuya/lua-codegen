@@ -13,13 +13,14 @@ VueJs = {}
 
 --- @class WebForm 前端表单信息
 
-
---- 接收路由信息，并生成前端代码
----
---- @param route WebRoute 路由信息
---- @param tbl WebTable 表展示数据
---- @param form WebForm 表单展示数据
---- @param name string 模块名,使用`.`分隔上下级模块
+--[[
+    --- 接收路由信息，并生成前端代码
+    ---
+    --- @param route WebRoute 路由信息
+    --- @param tbl WebTable 表展示数据
+    --- @param form WebForm 表单展示数据
+    --- @param name string 模块名,使用`.`分隔上下级模块
+]]
 
 
 

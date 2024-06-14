@@ -3,13 +3,10 @@
 --- @class NestJs
 NestJs = {}
 
---- 打印输出
-function logger(...) end
-
 --- 生成限制规则
 ---
---- @param max number|false 最大值
---- @param min number|false  最小值
+--- @param max number|None 最大值
+--- @param min number|None  最小值
 --- @param msg string 消息提示
 --- @return table
 function NestJs.createLimitRule(max, min, msg) end
@@ -37,7 +34,7 @@ function NestJs.createDtoRule(...) end
 ---
 ---@param key string 字段名
 ---@param type 'string' | 'number' | 'bool' 字段类型
----@param rule DTORule 字段规则
+---@param rule DTORule|false 字段规则
 ---@return DTOSchema
 function NestJs.creteDtoField(key, type, rule) end
 

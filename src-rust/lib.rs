@@ -11,7 +11,7 @@ use nestjs_lib::LuaNestLib;
 use vuejs_lib::LuaVueLib;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-#[wasm_bindgen(module = "@/libs/nest-lib")]
+#[wasm_bindgen(module = "@/libs")]
 extern "C" {
     pub fn printToNode(name: &JsValue);
 }
