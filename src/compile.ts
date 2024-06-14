@@ -16,7 +16,7 @@ const getPathName = () => {
 }
 
 export function compileToByte(filePath: string) {
-	const bin = resolve(__dirname, '../bin', getPathName())
+	const bin = resolve(__dirname, '../lua/bin', getPathName())
 	return new Promise<ArrayBuffer>((resolve, reject) => {
 		exec(
 			`${bin} -s -o - ${filePath}`,
