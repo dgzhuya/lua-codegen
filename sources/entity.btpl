@@ -3,4 +3,5 @@ import { Column, Entity } from 'typeorm'
 
 @Entity('w_{%name%}')
 export class {%up@name%}Entity extends BaseEntity {
+    {%content%}
 }
