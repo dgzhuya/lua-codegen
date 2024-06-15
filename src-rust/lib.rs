@@ -3,7 +3,7 @@ mod vuejs_lib;
 
 use gloo_utils::format::JsValueSerdeExt;
 use neige_lua::{
-    api::{CallApi, LuaApi, PushApi, SetApi},
+    api::{CallApi, LuaApi, PushApi},
     state::LuaState,
     LuaValue,
 };
@@ -37,8 +37,6 @@ pub fn run(data: &[u8], file_name: &str) {
     let mut state = LuaState::new();
     state.aux_lib();
     state.register("logger", logger);
-    state.push_nil();
-    state.set_global("None");
     state.nestjs_lib();
     state.vuejs_lib();
     state.load(data.to_vec(), file_name, "bt");
