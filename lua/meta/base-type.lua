@@ -1,6 +1,7 @@
 --- @meta Base
 
---- @alias None 'none'
+--- @alias None None
+None = None
 
 --- 打印输出
 function logger(...) end
