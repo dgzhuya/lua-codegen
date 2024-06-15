@@ -24,8 +24,6 @@ impl LuaNestLib for LuaState {
         self.set_field(-2, "createLimitRule");
         self.push_rust_fn(create_simple_rule);
         self.set_field(-2, "createSimpleRule");
-        self.push_rust_fn(create_dto_rule);
-        self.set_field(-2, "createDtoRule");
         self.push_rust_fn(crete_dto_field);
         self.set_field(-2, "creteDtoField");
         self.set_global("NestJs");
@@ -54,16 +52,16 @@ fn set_tbl_limit(ls: &mut dyn LuaApi) -> usize {
 
 fn create_limit_rule(ls: &mut dyn LuaApi) -> usize {
     ls.create_table(0, 3);
-    if ls.is_string(-2) {
-        ls.push_value(-2);
+    if ls.is_string(1) {
+        ls.push_value(1);
         ls.set_field(-2, "msg");
     }
-    if ls.is_number(-3) {
-        ls.push_value(-3);
+    if ls.is_number(2) {
+        ls.push_value(2);
         ls.set_field(-2, "min");
     }
-    if ls.is_number(-4) {
-        ls.push_value(-4);
+    if ls.is_number(3) {
+        ls.push_value(3);
         ls.set_field(-2, "max");
     }
     ls.push_rust_closure(set_tbl_limit, 1);
@@ -84,32 +82,23 @@ fn create_simple_rule(ls: &mut dyn LuaApi) -> usize {
     1
 }
 
-fn create_dto_rule(ls: &mut dyn LuaApi) -> usize {
+fn crete_dto_field(ls: &mut dyn LuaApi) -> usize {
     let cur_top = ls.get_top();
-    ls.create_table(cur_top as usize, 0);
-    for i in 1..=cur_top {
-        if ls.is_rust_fn(i) {
+    ls.create_table(0, cur_top as usize);
+    if ls.is_string(1) {
+        ls.push_value(1);
+        ls.set_field(-2, "key")
+    }
+    if ls.is_string(2) {
+        ls.push_value(2);
+        ls.set_field(-2, "type")
+    }
+    for i in 3..=cur_top {
+        if !ls.is_nil(i) && ls.is_rust_fn(i) {
             ls.push_value(i);
             ls.push_value(-2);
             ls.call(1, 0);
         }
-    }
-    1
-}
-
-fn crete_dto_field(ls: &mut dyn LuaApi) -> usize {
-    ls.create_table(3, 0);
-    if ls.is_string(-4) {
-        ls.push_value(-4);
-        ls.set_field(-2, "key")
-    }
-    if ls.is_string(-3) {
-        ls.push_value(-3);
-        ls.set_field(-2, "type")
-    }
-    if ls.is_lua_tbl(-2) {
-        ls.push_value(-2);
-        ls.set_field(-2, "rule")
     }
     1
 }
