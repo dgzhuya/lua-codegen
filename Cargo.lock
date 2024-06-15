@@ -77,9 +77,9 @@ dependencies = [
 
 [[package]]
 name = "neige-lua"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f2385a6bd2e9841acf44f3fec7716d20c505c68e157455c357b52d0edf080dac"
+checksum = "2d8b28896b3bcf8d0273d8b5a07b6a02b58fbd2ad17c2e90bcfbb5fe1981e544"
 dependencies = [
  "neige-infra",
  "neige-undump",
