@@ -2,7 +2,7 @@ import xiu from '@/render'
 import { join } from 'path'
 import { writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
-import { DTOSchema } from '@/types'
+import { DtoField } from '@/types'
 import { DTOFromat } from '@/format/dto'
 
 export class GenApi {
@@ -40,12 +40,13 @@ export class GenApi {
 		}
 		const entityPath = join(entityDir, `${this.#name}.entity.ts`)
 		const entityStr = await xiu.render('entity', {
-			name: this.#name
+			name: this.#name,
+			content: ''
 		})
 		writeFormatFile(entityPath, entityStr)
 	}
 
-	async genDto(dto: DTOSchema[]) {
+	async genDto(dto: DtoField[]) {
 		const dtoPath = join(this.#path, 'dto')
 		if (!existsSync(dtoPath)) {
 			mkdirSync(dtoPath)

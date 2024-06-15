@@ -1,12 +1,12 @@
-import { DTOSchema, ValidatorRule } from '@/types'
+import { DtoField } from '@/types'
 
 export class DTOFromat {
 	#importInfo: string
 	#content: string
-	#schemas: DTOSchema[]
+	#schemas: DtoField[]
 	#index = 0
 
-	constructor(schemas: DTOSchema[]) {
+	constructor(schemas: DtoField[]) {
 		this.#schemas = schemas
 		this.#importInfo = ''
 		this.#content = ''
@@ -22,7 +22,8 @@ export class DTOFromat {
 		return this.#schemas.length > this.#index
 	}
 
-	#formatType(curSchema: DTOSchema) {
+	#formatType() {
+		const curSchema = this.#schemas[this.#index]
 		this.#content += `readonly ${curSchema.key}:${curSchema.type}\n\n`
 	}
 
@@ -35,7 +36,7 @@ export class DTOFromat {
 			: `@${key}()\n`
 	}
 
-	#max(max: number, msg: string, type: DTOSchema['type']) {
+	#max(max: number, msg: string, type: DtoField['type']) {
 		if (type === 'number') {
 			if (!this.#importInfo.includes('Max,')) {
 				this.#importInfo += 'Max,'
@@ -49,7 +50,7 @@ export class DTOFromat {
 		}
 	}
 
-	#min(min: number, msg: string, type: DTOSchema['type']) {
+	#min(min: number, msg: string, type: DtoField['type']) {
 		if (type === 'number') {
 			if (!this.#importInfo.includes('Min,')) {
 				this.#importInfo += 'Min,'
@@ -63,7 +64,7 @@ export class DTOFromat {
 		}
 	}
 
-	#limit(max: number, min: number, msg: string, type: DTOSchema['type']) {
+	#limit(max: number, min: number, msg: string, type: DtoField['type']) {
 		if (type === 'number') {
 			this.#max(max, msg, type)
 			this.#min(min, msg, type)
@@ -75,17 +76,20 @@ export class DTOFromat {
 		}
 	}
 
-	#formatRule(rule: ValidatorRule, type: DTOSchema['type']) {
-		if (rule.isOptional) this.#setSimpleRule('IsOptional')
+	#formatRule() {
+		const { type, isInt, isOptional, isNumber, notEmpty, limit } =
+			this.#schemas[this.#index]
 
-		if (rule.notEmpty) this.#setSimpleRule('IsNotEmpty', rule.notEmpty)
+		if (isOptional) this.#setSimpleRule('IsOptional')
 
-		if (rule.isInt) this.#setSimpleRule('IsInt', rule.isInt)
+		if (notEmpty) this.#setSimpleRule('IsNotEmpty', notEmpty)
 
-		if (rule.isNumber) this.#setSimpleRule('IsNumber', rule.isNumber)
+		if (isInt) this.#setSimpleRule('IsInt', isInt)
 
-		if (rule.limit) {
-			const { max, min, msg } = rule.limit
+		if (isNumber) this.#setSimpleRule('IsNumber', isNumber)
+
+		if (limit) {
+			const { max, min, msg } = limit
 			if (max !== undefined && min !== undefined) {
 				this.#limit(max, min, msg, type)
 			} else if (max !== undefined) {
@@ -97,11 +101,8 @@ export class DTOFromat {
 	}
 
 	#formatCurSchema() {
-		const curSchema = this.#schemas[this.#index]
-		if (curSchema.rule) {
-			this.#formatRule(curSchema.rule, curSchema.type)
-		}
-		this.#formatType(curSchema)
+		this.#formatRule()
+		this.#formatType()
 	}
 
 	format() {
