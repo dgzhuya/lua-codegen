@@ -1,66 +1,44 @@
 import { DtoField } from '@/types'
+import { BaseFormat } from './base'
 
-export class DTOFromat {
-	#importInfo: string
-	#content: string
-	#schemas: DtoField[]
-	#index = 0
-
-	constructor(schemas: DtoField[]) {
-		this.#schemas = schemas
-		this.#importInfo = ''
-		this.#content = ''
-	}
-
-	#addImportStr() {
-		return this.#importInfo
-			? `import { ${this.#importInfo.slice(0, this.#importInfo.length - 1)} } from 'class-validator'\n`
-			: ''
-	}
-
-	#hasNext() {
-		return this.#schemas.length > this.#index
-	}
-
+export class DTOFromat extends BaseFormat<DtoField> {
 	#formatType() {
-		const curSchema = this.#schemas[this.#index]
-		this.#content += `readonly ${curSchema.key}:${curSchema.type}\n\n`
+		const curSchema = this.getCurSchema()
+		this.content += `readonly ${curSchema.key}:${curSchema.type}\n\n`
 	}
 
 	#setSimpleRule(key: string, val?: string) {
-		if (!this.#importInfo.includes(`${key},`)) {
-			this.#importInfo += `${key},`
+		if (!this.importInfo.includes(`${key},`)) {
+			this.importInfo += `${key},`
 		}
-		this.#content += val
-			? `@${key}({ message: '${val}' })\n`
-			: `@${key}()\n`
+		this.content += val ? `@${key}({ message: '${val}' })\n` : `@${key}()\n`
 	}
 
 	#max(max: number, msg: string, type: DtoField['type']) {
 		if (type === 'number') {
-			if (!this.#importInfo.includes('Max,')) {
-				this.#importInfo += 'Max,'
+			if (!this.importInfo.includes('Max,')) {
+				this.importInfo += 'Max,'
 			}
-			this.#content += `@Max(${max}, { message: '${msg}' })\n`
+			this.content += `@Max(${max}, { message: '${msg}' })\n`
 		} else if (type === 'string') {
-			if (!this.#importInfo.includes('MaxLength,')) {
-				this.#importInfo += 'MaxLength,'
+			if (!this.importInfo.includes('MaxLength,')) {
+				this.importInfo += 'MaxLength,'
 			}
-			this.#content += `@MaxLength(${max}, { message: '${msg}' })\n`
+			this.content += `@MaxLength(${max}, { message: '${msg}' })\n`
 		}
 	}
 
 	#min(min: number, msg: string, type: DtoField['type']) {
 		if (type === 'number') {
-			if (!this.#importInfo.includes('Min,')) {
-				this.#importInfo += 'Min,'
+			if (!this.importInfo.includes('Min,')) {
+				this.importInfo += 'Min,'
 			}
-			this.#content += `@Min(${min}, { message: '${msg}' })\n`
+			this.content += `@Min(${min}, { message: '${msg}' })\n`
 		} else if (type === 'string') {
-			if (!this.#importInfo.includes('MinLength,')) {
-				this.#importInfo += 'MinLength,'
+			if (!this.importInfo.includes('MinLength,')) {
+				this.importInfo += 'MinLength,'
 			}
-			this.#content += `@MinLength(${min}, { message: '${msg}' })\n`
+			this.content += `@MinLength(${min}, { message: '${msg}' })\n`
 		}
 	}
 
@@ -69,16 +47,16 @@ export class DTOFromat {
 			this.#max(max, msg, type)
 			this.#min(min, msg, type)
 		} else if (type === 'string') {
-			if (!this.#importInfo.includes('Length,')) {
-				this.#importInfo += 'Length,'
+			if (!this.importInfo.includes('Length,')) {
+				this.importInfo += 'Length,'
 			}
-			this.#content += `@Length(${min}, ${max}, { message: '${msg}' })\n`
+			this.content += `@Length(${min}, ${max}, { message: '${msg}' })\n`
 		}
 	}
 
 	#formatRule() {
 		const { type, isInt, isOptional, isNumber, notEmpty, limit } =
-			this.#schemas[this.#index]
+			this.getCurSchema()
 
 		if (isOptional) this.#setSimpleRule('IsOptional')
 
@@ -100,16 +78,14 @@ export class DTOFromat {
 		}
 	}
 
-	#formatCurSchema() {
+	protected formatCurSchema() {
 		this.#formatRule()
 		this.#formatType()
 	}
 
-	format() {
-		while (this.#hasNext()) {
-			this.#formatCurSchema()
-			this.#index++
+	protected formatEnd() {
+		if (this.importInfo) {
+			this.importInfo = `import { ${this.importInfo.slice(0, this.importInfo.length - 1)} } from 'class-validator'\n`
 		}
-		return [this.#addImportStr(), this.#content]
 	}
 }
