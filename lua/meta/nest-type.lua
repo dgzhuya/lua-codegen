@@ -13,21 +13,23 @@ NestJs = {}
 --- @return RuleFn
 function NestJs.createLimitRule(msg, min, max) end
 
+--- @alias SimpleRuleType 'isOptional' | 'notEmpty' | 'isInt' | 'isNumber'
+
 --- 生成简单规则
 ---
---- @param key 'isOptional' | 'notEmpty' | 'isInt' | 'isNumber' 规则类型
+--- @param key SimpleRuleType 规则类型
 --- @param msg string | true 消息提示
 --- @return RuleFn
 function NestJs.createSimpleRule(key, msg) end
 
 --- @class DtoField
 --- @field key string
---- @field type 'string' | 'number' | 'bool'
+--- @field type FieldType
 
 --- 生成DTO字段信息
 ---
 --- @param key string 字段名
---- @param type 'string' | 'number' | 'bool' 字段类型
+--- @param type FieldType 字段类型
 --- @param ... RuleFn 字段规则函数
 --- @return DtoField
 function NestJs.creteDtoField(key, type, ...) end
