@@ -7,8 +7,7 @@ use wasm_bindgen::JsValue;
 
 #[wasm_bindgen(module = "@/libs/nest-lib")]
 extern "C" {
-    pub fn genWebCode(name: &str, val: &JsValue);
-    pub fn genApiCode(name: &str, val: &JsValue);
+    pub fn genApiCode(name: &str, dto: &JsValue, entity: &JsValue);
 }
 
 pub trait LuaNestLib {
@@ -20,25 +19,39 @@ impl LuaNestLib for LuaState {
         self.create_table(0, 1);
         self.push_rust_fn(gen_api_code);
         self.set_field(-2, "genApiCode");
-        self.push_rust_fn(create_limit_rule);
-        self.set_field(-2, "createLimitRule");
-        self.push_rust_fn(create_simple_rule);
-        self.set_field(-2, "createSimpleRule");
-        self.push_rust_fn(crete_dto_field);
+
+        self.push_rust_fn(crete_field);
         self.set_field(-2, "creteDtoField");
+        self.push_rust_fn(create_field_limit);
+        self.set_field(-2, "createLimitRule");
+        self.push_rust_fn(create_field_simple);
+        self.set_field(-2, "createSimpleRule");
+
+        self.push_rust_fn(crete_field);
+        self.set_field(-2, "creteEntityField");
+        self.push_rust_fn(create_field_simple);
+        self.set_field(-2, "createSimpleColumn");
+        self.push_rust_fn(create_column_type);
+        self.set_field(-2, "creteColumnType");
         self.set_global("NestJs");
     }
 }
 
 fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
-    let name = ls.to_string(-2);
-    let dto = if ls.is_lua_tbl(-1) {
-        let val = ls.to_lua_tbl(-1).unwrap();
+    let name = ls.to_string(1);
+    let dto = if ls.is_lua_tbl(2) {
+        let val = ls.to_lua_tbl(2).unwrap();
         JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
     } else {
         JsValue::null()
     };
-    genApiCode(&name, &dto);
+    let entity = if ls.is_lua_tbl(3) {
+        let val = ls.to_lua_tbl(3).unwrap();
+        JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
+    } else {
+        JsValue::null()
+    };
+    genApiCode(&name, &dto, &entity);
     0
 }
 
@@ -50,7 +63,7 @@ fn set_tbl_limit(ls: &mut dyn LuaApi) -> usize {
     0
 }
 
-fn create_limit_rule(ls: &mut dyn LuaApi) -> usize {
+fn create_field_limit(ls: &mut dyn LuaApi) -> usize {
     ls.create_table(0, 3);
     if ls.is_string(1) {
         ls.push_value(1);
@@ -77,12 +90,19 @@ fn set_tbl_simple(ls: &mut dyn LuaApi) -> usize {
     0
 }
 
-fn create_simple_rule(ls: &mut dyn LuaApi) -> usize {
+fn create_column_type(ls: &mut dyn LuaApi) -> usize {
+    ls.push_string("dataType");
+    ls.push_value(1);
     ls.push_rust_closure(set_tbl_simple, 2);
     1
 }
 
-fn crete_dto_field(ls: &mut dyn LuaApi) -> usize {
+fn create_field_simple(ls: &mut dyn LuaApi) -> usize {
+    ls.push_rust_closure(set_tbl_simple, 2);
+    1
+}
+
+fn crete_field(ls: &mut dyn LuaApi) -> usize {
     let cur_top = ls.get_top();
     ls.create_table(0, cur_top as usize);
     if ls.is_string(1) {

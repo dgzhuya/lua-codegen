@@ -2,9 +2,13 @@ import { join } from 'path'
 import { getApiDir } from '@/config'
 import { existsSync, mkdirSync } from 'fs'
 import { GenApi } from '@/code/nest'
-import { DtoField } from '@/types'
+import { DtoField, EntityField } from '@/types'
 
-export function genApiCode(name: string, dto: DtoField[]) {
+export function genApiCode(
+	name: string,
+	dto: DtoField[],
+	entity: EntityField[]
+) {
 	const basePath = join(getApiDir(), name)
 	if (!existsSync(basePath)) {
 		mkdirSync(basePath)
@@ -12,7 +16,7 @@ export function genApiCode(name: string, dto: DtoField[]) {
 	const api = new GenApi(basePath, name)
 	api.genModule()
 	api.genDto(dto)
-	api.genEntity()
+	api.genEntity(entity)
 	api.genService()
 	api.genController()
 }

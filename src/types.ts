@@ -17,5 +17,5 @@ export type EntityField = FieldSchema & {
 	length?: number
 	nullable?: true
 	name?: string
-	type?: 'int' | 'datetime' | 'varchar' | 'tinyint'
+	dataType?: 'int' | 'datetime' | 'varchar' | 'tinyint'
 }
