@@ -12,9 +12,10 @@ export type DtoField = FieldSchema & {
 }
 
 export type EntityField = FieldSchema & {
-	column: {
-		comment: string
-		length: number
-		nullable: true
-	}
+	isExclude?: true
+	comment?: string
+	length?: number
+	nullable?: true
+	name?: string
+	type?: 'int' | 'datetime' | 'varchar' | 'tinyint'
 }

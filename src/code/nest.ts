@@ -2,8 +2,9 @@ import xiu from '@/render'
 import { join } from 'path'
 import { writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
-import { DtoField } from '@/types'
+import { DtoField, EntityField } from '@/types'
 import { DTOFromat } from '@/format/dto'
+import { EntityFormat } from '@/format/entity'
 
 export class GenApi {
 	#path: string
@@ -33,15 +34,17 @@ export class GenApi {
 		writeFormatFile(controllerPath, controllerStr)
 	}
 
-	async genEntity() {
+	async genEntity(entity: EntityField[]) {
 		const entityDir = join(this.#path, 'entities')
 		if (!existsSync(entityDir)) {
 			mkdirSync(entityDir)
 		}
 		const entityPath = join(entityDir, `${this.#name}.entity.ts`)
+		const [importInfo, content] = new EntityFormat(entity).format()
 		const entityStr = await xiu.render('entity', {
 			name: this.#name,
-			content: ''
+			importInfo,
+			content
 		})
 		writeFormatFile(entityPath, entityStr)
 	}
