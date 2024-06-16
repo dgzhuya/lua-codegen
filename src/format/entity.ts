@@ -26,7 +26,7 @@ export class EntityFormat extends BaseFormat<EntityField> {
 
 		if (comment) this.#columnStr += `comment: '${comment}',`
 
-		if (nullable) this.#columnStr += `nullable: '${nullable}',`
+		if (nullable) this.#columnStr += `nullable: true,`
 
 		if (dataType) this.#columnStr += `type: '${dataType}',`
 
@@ -36,6 +36,6 @@ export class EntityFormat extends BaseFormat<EntityField> {
 			this.content += `@Column({ ${this.#columnStr.slice(0, this.#columnStr.length - 1)} })\n`
 		}
 		this.#columnStr = ''
-		this.content += `${key}:${type}\n`
+		this.content += `${key}:${type}\n\n`
 	}
 }
