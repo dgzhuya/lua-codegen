@@ -1,12 +1,12 @@
-import { ApiService } from '@/types'
+import { ApiServiceField } from '@/types'
 import { BaseFormat } from './base'
 
-export class ServiceFormat extends BaseFormat<ApiService> {
+export class ServiceFormat extends BaseFormat<ApiServiceField> {
 	#moudleName: string
 	#upperName: string
 	#serviceMap: Record<string, boolean> = {}
 
-	constructor(moduleName: string, apiService: ApiService[]) {
+	constructor(moduleName: string, apiService: ApiServiceField[]) {
 		super(apiService)
 		this.#moudleName = moduleName
 		this.#upperName = moduleName[0].toUpperCase() + moduleName.slice(1)

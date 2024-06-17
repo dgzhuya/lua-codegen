@@ -2,7 +2,7 @@ import xiu from '@/render'
 import { join } from 'path'
 import { writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
-import { ApiService, DtoField, EntityField } from '@/types'
+import { ApiServiceField, DtoField, EntityField } from '@/types'
 import { DTOFromat } from '@/format/dto'
 import { EntityFormat } from '@/format/entity'
 import { ApiFormat } from '@/format/api'
@@ -22,7 +22,7 @@ export class GenApi {
 		writeFormatFile(modulePath, moduleStr)
 	}
 
-	async genApiService(apiService: ApiService[]) {
+	async genApiService(apiService: ApiServiceField[]) {
 		const controllerPath = join(this.#path, `${this.#name}.controller.ts`)
 		const servicePath = join(this.#path, `${this.#name}.service.ts`)
 		const [apiImport, apiContent] = new ApiFormat(
