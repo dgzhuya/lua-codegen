@@ -2,9 +2,11 @@ import xiu from '@/render'
 import { join } from 'path'
 import { writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
-import { DtoField, EntityField } from '@/types'
+import { ApiService, DtoField, EntityField } from '@/types'
 import { DTOFromat } from '@/format/dto'
 import { EntityFormat } from '@/format/entity'
+import { ApiFormat } from '@/format/api'
+import { ServiceFormat } from '@/format/service'
 
 export class GenApi {
 	#path: string
@@ -14,24 +16,36 @@ export class GenApi {
 		this.#path = path
 	}
 
-	async genService() {
-		const servicePath = join(this.#path, `${this.#name}.service.ts`)
-		const serviceStr = await xiu.render('service', { name: this.#name })
-		writeFormatFile(servicePath, serviceStr)
-	}
-
 	async genModule() {
 		const modulePath = join(this.#path, `${this.#name}.module.ts`)
 		const moduleStr = await xiu.render('module', { name: this.#name })
 		writeFormatFile(modulePath, moduleStr)
 	}
 
-	async genController() {
+	async genApiService(apiService: ApiService[]) {
 		const controllerPath = join(this.#path, `${this.#name}.controller.ts`)
-		const controllerStr = await xiu.render('controller', {
-			name: this.#name
+		const servicePath = join(this.#path, `${this.#name}.service.ts`)
+		const [apiImport, apiContent] = new ApiFormat(
+			this.#name,
+			apiService
+		).format()
+		xiu.render('controller', {
+			name: this.#name,
+			importInfo: apiImport,
+			content: apiContent
+		}).then(controllerStr => {
+			writeFormatFile(controllerPath, controllerStr)
 		})
-		writeFormatFile(controllerPath, controllerStr)
+		const [_, serviceContent] = new ServiceFormat(
+			this.#name,
+			apiService
+		).format()
+		xiu.render('service', {
+			name: this.#name,
+			content: serviceContent
+		}).then(serviceStr => {
+			writeFormatFile(servicePath, serviceStr)
+		})
 	}
 
 	async genEntity(entity: EntityField[]) {

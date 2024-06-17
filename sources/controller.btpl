@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+{%importInfo%}
 import { {%up@name%}Service } from './{%name%}.service'
 import { Create{%up@name%}Dto } from './dto/create-{%name%}.dto'
 import { Update{%up@name%}Dto } from './dto/update-{%name%}.dto'
@@ -7,30 +7,5 @@ import { PageDto } from '@api/common/dto/page.dto'
 @Controller('{%name%}')
 export class {%up@name%}Controller {
 	constructor(private readonly {%name%}Service: {%up@name%}Service) {}
-
-	@Post()
-	create(@Body() create{%up@name%}Dto: Create{%up@name%}Dto) {
-		return this.{%name%}Service.create(create{%up@name%}Dto)
-	}
-
-	@Get()
-	findAll(@Query() pageDto: PageDto) {
-		const { skip, take } = PageDto.setSkipTake(pageDto)
-		return this.{%name%}Service.table(skip, take, pageDto.search)
-	}
-
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.{%name%}Service.query(+id)
-	}
-
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() update{%up@name%}Dto: Update{%up@name%}Dto) {
-		return this.{%name%}Service.update(+id, update{%up@name%}Dto)
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.{%name%}Service.delete(+id)
-	}
+	{%content%}
 }

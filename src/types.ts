@@ -19,3 +19,8 @@ export type EntityField = FieldSchema & {
 	name?: string
 	dataType?: 'int' | 'datetime' | 'varchar' | 'tinyint'
 }
+
+export type ApiService = {
+	key: 'get' | 'all' | 'delete' | 'update' | 'add'
+	interceptor?: true
+}
