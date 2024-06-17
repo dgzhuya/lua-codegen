@@ -10,7 +10,6 @@ export class ServiceFormat extends BaseFormat<ApiServiceField> {
 		super(apiService)
 		this.#moudleName = moduleName
 		this.#upperName = moduleName[0].toUpperCase() + moduleName.slice(1)
-		this.importInfo = `Body,Controller,Delete,Get,Param,Patch,Post,Query,`
 	}
 
 	protected formatOnceStep(): void {
@@ -52,6 +51,16 @@ export class ServiceFormat extends BaseFormat<ApiServiceField> {
                 create(create${this.#upperName}Dto: Create${this.#upperName}Dto) {
                     return this.${this.#moudleName}Repository.save(create${this.#upperName}Dto)
                 }\n`
+		}
+	}
+
+	protected formatEnd(): void {
+		if (this.#serviceMap['add']) {
+			this.importInfo += `import { Create${this.#upperName}Dto } from './dto/create-${this.#upperName}.dto'\n`
+		}
+
+		if (this.#serviceMap['update']) {
+			this.importInfo += `import { Update${this.#upperName}Dto } from './dto/update-${this.#upperName}.dto'\n`
 		}
 	}
 }

@@ -36,13 +36,14 @@ export class GenApi {
 		}).then(controllerStr => {
 			writeFormatFile(controllerPath, controllerStr)
 		})
-		const [_, serviceContent] = new ServiceFormat(
+		const [serviceImport, serviceContent] = new ServiceFormat(
 			this.#name,
 			apiService
 		).format()
 		xiu.render('service', {
 			name: this.#name,
-			content: serviceContent
+			content: serviceContent,
+			importInfo: serviceImport
 		}).then(serviceStr => {
 			writeFormatFile(servicePath, serviceStr)
 		})

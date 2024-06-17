@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Create{%up@name%}Dto } from './dto/create-{%name%}.dto'
-import { Update{%up@name%}Dto } from './dto/update-{%name%}.dto'
-import { {%up@name%}Entity } from './entities/{%name%}.entity'
+{%importInfo%}import { {%up@name%}Entity } from './entities/{%name%}.entity'
 
 @Injectable()
 export class {%up@name%}Service {
