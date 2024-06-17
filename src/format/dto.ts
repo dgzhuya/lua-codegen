@@ -2,6 +2,10 @@ import { DtoField } from '@/types'
 import { BaseFormat } from './base'
 
 export class DTOFromat extends BaseFormat<DtoField> {
+	constructor(dto: DtoField[]) {
+		super(dto)
+	}
+
 	#formatType() {
 		const curSchema = this.getCurSchema()
 		this.content += `readonly ${curSchema.key}:${curSchema.type}\n\n`

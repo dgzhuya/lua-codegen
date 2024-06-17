@@ -3,6 +3,11 @@ import { BaseFormat } from './base'
 
 export class EntityFormat extends BaseFormat<EntityField> {
 	#columnStr = ''
+
+	constructor(entity: EntityField[]) {
+		super(entity)
+	}
+
 	protected formatCurSchema(): void {
 		const {
 			key,
@@ -34,6 +39,8 @@ export class EntityFormat extends BaseFormat<EntityField> {
 
 		if (this.#columnStr) {
 			this.content += `@Column({ ${this.#columnStr.slice(0, this.#columnStr.length - 1)} })\n`
+		} else {
+			this.content += `@Column()\n`
 		}
 		this.#columnStr = ''
 		this.content += `${key}:${type}\n\n`
