@@ -8,7 +8,7 @@ export class EntityFormat extends BaseFormat<EntityField> {
 		super(entity)
 	}
 
-	protected formatCurSchema(): void {
+	protected formatOnceStep(): void {
 		const {
 			key,
 			type,

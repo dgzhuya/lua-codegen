@@ -82,7 +82,7 @@ export class DTOFromat extends BaseFormat<DtoField> {
 		}
 	}
 
-	protected formatCurSchema() {
+	protected formatOnceStep() {
 		this.#formatRule()
 		this.#formatType()
 	}

@@ -18,13 +18,13 @@ export abstract class BaseFormat<T> {
 		return this.#schemas[this.#index]
 	}
 
-	protected formatCurSchema() {}
+	protected formatOnceStep() {}
 
 	protected formatEnd() {}
 
 	format() {
 		while (this.#hasNext()) {
-			this.formatCurSchema()
+			this.formatOnceStep()
 			this.#index++
 		}
 		this.formatEnd()
