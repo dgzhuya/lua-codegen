@@ -3,7 +3,12 @@ import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
 import { setConfig } from './config'
 
-async function runLua(filePath: string) {
+async function runLua(
+	filePath: string,
+	config?: { webDir?: string; apiDir?: string }
+) {
+	if (config) setConfig(config)
+
 	if (existsSync(filePath)) {
 		try {
 			const data = await compileToByte(filePath)
@@ -16,4 +21,4 @@ async function runLua(filePath: string) {
 	}
 }
 
-export { runLua, setConfig }
+export { runLua }

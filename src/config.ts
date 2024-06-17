@@ -5,9 +5,13 @@ const CodegenConfig = {
 	apiDir: resolve(__dirname, '..')
 }
 
-export function setConfig(webDir: string, apiDir: string) {
-	CodegenConfig.webDir = webDir
-	CodegenConfig.apiDir = apiDir
+export function setConfig(config: { webDir?: string; apiDir?: string }) {
+	if (config.webDir) {
+		CodegenConfig.webDir = config.webDir
+	}
+	if (config.apiDir) {
+		CodegenConfig.apiDir = config.apiDir
+	}
 }
 
 export const getWebDir = () => CodegenConfig.webDir
