@@ -7,7 +7,7 @@ use wasm_bindgen::JsValue;
 
 #[wasm_bindgen(module = "@/libs/nest-lib")]
 extern "C" {
-    pub fn genApiCode(name: &str, dto: &JsValue, entity: &JsValue);
+    pub fn genApiCode(name: &str, dto: &JsValue, entity: &JsValue, apiService: &JsValue);
 }
 
 pub trait LuaNestLib {
@@ -33,8 +33,24 @@ impl LuaNestLib for LuaState {
         self.set_field(-2, "createSimpleColumn");
         self.push_rust_fn(create_column_type);
         self.set_field(-2, "creteColumnType");
+
+        self.push_rust_fn(gen_api_service_field);
+        self.set_field(-2, "createApiService");
         self.set_global("NestJs");
     }
+}
+
+fn gen_api_service_field(ls: &mut dyn LuaApi) -> usize {
+    ls.create_table(0, 1);
+    if ls.is_string(1) {
+        ls.push_value(1);
+        ls.set_field(-2, "key")
+    }
+    if ls.is_boolean(2) {
+        ls.push_boolean(true);
+        ls.set_field(-2, "interceptor")
+    }
+    1
 }
 
 fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
@@ -51,7 +67,13 @@ fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
     } else {
         JsValue::null()
     };
-    genApiCode(&name, &dto, &entity);
+    let api_service = if ls.is_lua_tbl(4) {
+        let val = ls.to_lua_tbl(4).unwrap();
+        JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
+    } else {
+        JsValue::null()
+    };
+    genApiCode(&name, &dto, &entity, &api_service);
     0
 }
 

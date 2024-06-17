@@ -62,9 +62,23 @@ function NestJs.creteColumnType(type) end
 --- @return EntityField
 function NestJs.creteEntityField(key, type, ...) end
 
+--- @alias ApiServiceFieldKey 'get' | 'all' | 'delete' | 'update' | 'add'
+
+--- @class ApiServiceField
+--- @field key ApiServiceFieldKey
+--- @field interceptor true
+
+--- 创建请求API和服务结构体
+---
+--- @param key ApiServiceFieldKey
+--- @param interceptor true | nil
+--- @return ApiServiceField
+function NestJs.createApiService(key, interceptor) end
+
 --- 创建后端代码
 ---
 --- @param name string 模块名
 --- @param dto  DtoField[]  dto数据结构
 --- @param entity EntityField[] entity数据结构
-function NestJs.genApiCode(name, dto, entity) end
+--- @param apiService ApiServiceField[] entity数据结构
+function NestJs.genApiCode(name, dto, entity, apiService) end
