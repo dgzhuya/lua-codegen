@@ -6,12 +6,12 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 	#moudleName: string
 	#upperName: string
 	#apiMap: Record<string, boolean> = {}
+	#importCommon = 'Controller,'
 
 	constructor(moduleName: string, apiService: ApiServiceField[]) {
 		super(apiService)
 		this.#moudleName = moduleName
 		this.#upperName = moduleName[0].toUpperCase() + moduleName.slice(1)
-		this.importInfo = `Body,Controller,Delete,Get,Param,Patch,Post,Query,`
 	}
 
 	protected formatOnceStep(): void {
@@ -24,7 +24,7 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 
 		if (interceptor) {
 			this.#hasInterceptor = true
-			this.content += '@UseInterceptors(ClassSerializerInterceptor)\n'
+			this.content += '\n@UseInterceptors(ClassSerializerInterceptor)\n'
 		}
 
 		if (key === 'get') {
@@ -50,7 +50,7 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 			this.content += `
 				@Patch(':id')
 				update(@Param('id') id: string, @Body() update${this.#upperName}Dto: Update${this.#upperName}Dto) {
-					return this.${this.#moudleName}Service.update(+id, new Update${this.#upperName}Dto(update${this.#upperName}Dto))
+					return this.${this.#moudleName}Service.update(+id, update${this.#upperName}Dto)
 				}\n`
 		} else if (key === 'add') {
 			this.content += `
@@ -62,9 +62,40 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 	}
 
 	protected formatEnd(): void {
-		if (this.#hasInterceptor) {
-			this.importInfo += 'UseInterceptors,ClassSerializerInterceptor,'
+		if (this.#apiMap['get']) {
+			this.#importCommon += 'Get,'
 		}
-		this.importInfo = `import { ${this.importInfo.slice(0, this.importInfo.length - 1)} } from '@nestjs/common'`
+
+		if (this.#apiMap['delete']) {
+			this.#importCommon += 'Delete,'
+		}
+		if (this.#apiMap['all']) {
+			this.#importCommon += 'Query,'
+			this.importInfo += `import { PageDto } from '@api/common/dto/page.dto'\n`
+		}
+
+		if (this.#apiMap['add']) {
+			this.#importCommon += 'Post,'
+			this.importInfo += `import { Create${this.#upperName}Dto } from './dto/create-${this.#moudleName}.dto'\n`
+		}
+
+		if (this.#apiMap['update']) {
+			this.#importCommon += 'Patch,'
+			this.importInfo += `import { Update${this.#upperName}Dto } from './dto/update-${this.#moudleName}.dto'\n`
+		}
+		if (
+			this.#apiMap['get'] ||
+			this.#apiMap['delete'] ||
+			this.#apiMap['update']
+		) {
+			this.#importCommon += 'Param,'
+		}
+		if (this.#apiMap['add'] || this.#apiMap['update']) {
+			this.#importCommon += 'Body,'
+		}
+		if (this.#hasInterceptor) {
+			this.#importCommon += 'UseInterceptors,ClassSerializerInterceptor,'
+		}
+		this.importInfo += `import { ${this.#importCommon.slice(0, this.#importCommon.length - 1)} } from '@nestjs/common'\n`
 	}
 }

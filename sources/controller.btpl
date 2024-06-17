@@ -1,8 +1,5 @@
-{%importInfo%}
 import { {%up@name%}Service } from './{%name%}.service'
-import { Create{%up@name%}Dto } from './dto/create-{%name%}.dto'
-import { Update{%up@name%}Dto } from './dto/update-{%name%}.dto'
-import { PageDto } from '@api/common/dto/page.dto'
+{%importInfo%}
 
 @Controller('{%name%}')
 export class {%up@name%}Controller {
