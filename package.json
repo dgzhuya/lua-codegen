@@ -1,6 +1,6 @@
 {
 	"name": "@biuxiu/codegen",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "代码生成工具",
 	"main": "dist/index.js",
 	"scripts": {
