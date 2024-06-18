@@ -1,12 +1,9 @@
 import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
-import { setConfig } from './config'
+import { ConfigType, setConfig } from './config'
 
-async function runLua(
-	filePath: string,
-	config?: { webDir?: string; apiDir?: string }
-) {
+async function startRun(filePath: string, config?: ConfigType) {
 	if (config) setConfig(config)
 
 	if (existsSync(filePath)) {
@@ -21,4 +18,4 @@ async function runLua(
 	}
 }
 
-export { runLua }
+export { startRun }
