@@ -14,9 +14,6 @@
 	"files": [
 		"lua/bin",
 		"dist",
-		"pkg/lua_codegen_bg.wasm",
-		"pkg/lua_codegen.d.ts",
-		"pkg/lua_codegen.js",
 		"sources",
 		"README.md"
 	],
