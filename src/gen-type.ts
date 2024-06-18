@@ -14,9 +14,11 @@ export const genLuaTypes = async (path: string) => {
 		readPath: resolve(__dirname, `../sources/${t}-type.txt`)
 	}))
 	moveList.forEach(m => {
-		readFile(m.readPath, 'utf-8').then(content => {
-			writeFile(m.writePath, content)
-		})
+		if (!existsSync(m.writePath)) {
+			readFile(m.readPath, 'utf-8').then(content => {
+				writeFile(m.writePath, content)
+			})
+		}
 	})
 	const settingPath = join(vscodePath, 'settings.json')
 	if (existsSync(settingPath)) {
