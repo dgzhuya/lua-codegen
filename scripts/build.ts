@@ -53,7 +53,7 @@ build({
 				'require(`@/libs',
 				'require(`./libs'
 			)
-			content.replace(
+			content = content.replace(
 				"require('path').join(__dirname, 'lua_codegen_bg.wasm')",
 				"require('./lua_codegen_bg.wasm')"
 			)
