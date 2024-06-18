@@ -29,7 +29,7 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 
 		if (key === 'get') {
 			this.content += `
-				@Get(':id1')
+				@Get(':id')
 				findOne(@Param('id') id: string) {
 					return this.${this.#moudleName}Service.query(+id)
 				}\n`
