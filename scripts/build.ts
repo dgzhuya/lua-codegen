@@ -49,9 +49,13 @@ build({
 		}
 		const jsFile = join(rootPath, 'pkg/lua_codegen.js')
 		if (existsSync(jsFile)) {
-			const content = readFileSync(jsFile, 'utf-8').replaceAll(
+			let content = readFileSync(jsFile, 'utf-8').replaceAll(
 				'require(`@/libs',
 				'require(`./libs'
+			)
+			content.replace(
+				"require('path').join(__dirname, 'lua_codegen_bg.wasm')",
+				"require('./lua_codegen_bg.wasm')"
 			)
 			writeFileSync(join(outdir, 'lua_codegen.js'), content)
 		}
@@ -63,7 +67,7 @@ build({
 			)
 			writeFileSync(indexFile, content)
 		}
-		console.log('>>>add banner success')
+		console.log('>>>set file success')
 	})
 	.catch(err => {
 		console.log('>>>build error start')
