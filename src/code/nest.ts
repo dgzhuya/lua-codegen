@@ -29,14 +29,25 @@ export class RenderNest {
 	#name: string
 	#path: string
 
+	#formatPath(path: string) {
+		return path
+			.split('/')
+			.filter(p => p)
+			.join('/')
+	}
+
 	constructor(name: string, path?: string) {
-		this.#path = path || name
+		this.#path = path
+			? path.endsWith('/')
+				? `${this.#formatPath(path)}/${name}`
+				: this.#formatPath(path)
+			: name
 		let basePath = ''
 		const apiDir = getApiDir()
 		if (this.#path.includes('/')) {
-			const basePaths = this.#path.split('/')
-			for (let i = 0; i < basePaths.length; i++) {
-				const curPath = basePaths[i]
+			const pathArr = this.#path.split('/')
+			for (let i = 0; i < pathArr.length; i++) {
+				const curPath = pathArr[i]
 				if (i === 0) {
 					basePath = join(apiDir, curPath)
 				} else {
@@ -52,7 +63,6 @@ export class RenderNest {
 				mkdirSync(basePath)
 			}
 		}
-
 		this.#name = name
 		this.#moduleDir = basePath
 	}
@@ -97,12 +107,10 @@ export class RenderNest {
 					})
 					const text = consumerStatement.getText()
 					if (text.includes(moudleName)) {
-						console.log('text: ', text)
 						const newText = text.replace(
 							new RegExp(`,\\s*${moudleName}`),
 							''
 						)
-						console.log('newText: ', newText)
 						consumerStatement.replaceWithText(newText)
 					}
 				} else {
