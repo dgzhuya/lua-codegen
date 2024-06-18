@@ -1,14 +1,14 @@
-import { GenApi } from '@/code/nest'
+import { RenderNest } from '@/code/nest'
 import { isReverse } from '@/config'
 import { ApiServiceField, DtoField, EntityField } from '@/types'
 
-export function genApiCode(
-	name: string,
+export function renderNestCode(
+	config: { name: string; path?: string },
 	dto: DtoField[],
 	entity: EntityField[],
 	apiService: ApiServiceField[]
 ) {
-	const api = new GenApi(name)
+	const api = new RenderNest(config.name, config.path)
 	if (isReverse()) {
 		api.remove()
 		return

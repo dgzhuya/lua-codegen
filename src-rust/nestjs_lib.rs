@@ -7,7 +7,7 @@ use wasm_bindgen::JsValue;
 
 #[wasm_bindgen(module = "@/libs/nest-lib")]
 extern "C" {
-    pub fn genApiCode(name: &str, dto: &JsValue, entity: &JsValue, apiService: &JsValue);
+    pub fn renderNestCode(config: &JsValue, dto: &JsValue, entity: &JsValue, apiService: &JsValue);
 }
 
 pub trait LuaNestLib {
@@ -18,7 +18,7 @@ impl LuaNestLib for LuaState {
     fn nestjs_lib(&mut self) {
         self.create_table(0, 1);
         self.push_rust_fn(gen_api_code);
-        self.set_field(-2, "genApiCode");
+        self.set_field(-2, "renderToCode");
 
         self.push_rust_fn(crete_field);
         self.set_field(-2, "creteDtoField");
@@ -54,7 +54,12 @@ fn gen_api_service_field(ls: &mut dyn LuaApi) -> usize {
 }
 
 fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
-    let name = ls.to_string(1);
+    let conig = if ls.is_lua_tbl(1) {
+        let val = ls.to_lua_tbl(1).unwrap();
+        JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
+    } else {
+        JsValue::null()
+    };
     let dto = if ls.is_lua_tbl(2) {
         let val = ls.to_lua_tbl(2).unwrap();
         JsValue::from_serde(&LuaValue::Table(val)).unwrap_or(JsValue::null())
@@ -73,7 +78,7 @@ fn gen_api_code(ls: &mut dyn LuaApi) -> usize {
     } else {
         JsValue::null()
     };
-    genApiCode(&name, &dto, &entity, &api_service);
+    renderNestCode(&conig, &dto, &entity, &api_service);
     0
 }
 

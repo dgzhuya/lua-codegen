@@ -75,10 +75,14 @@ function NestJs.creteEntityField(key, type, ...) end
 --- @return ApiServiceField
 function NestJs.createApiService(key, interceptor) end
 
+--- @class RenderConfig
+--- @field name string
+--- @field path? string
+
 --- 创建后端代码
 ---
---- @param name string 模块名
+--- @param config RenderConfig 模块名
 --- @param dto  DtoField[]  dto数据结构
 --- @param entity EntityField[] entity数据结构
 --- @param apiService ApiServiceField[] entity数据结构
-function NestJs.genApiCode(name, dto, entity, apiService) end
+function NestJs.renderToCode(config, dto, entity, apiService) end
