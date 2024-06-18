@@ -1,7 +1,14 @@
 import { build } from 'esbuild'
 import { dtsPlugin } from 'esbuild-plugin-d.ts'
-import { readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'fs'
-import { join, resolve } from 'path'
+import {
+	readFileSync,
+	readdirSync,
+	statSync,
+	cpSync,
+	writeFileSync,
+	existsSync
+} from 'fs'
+import { join } from 'path'
 import { cwd } from 'process'
 
 const rootPath = cwd()
@@ -21,9 +28,10 @@ export const getTSFile = (path: string) => {
 	}
 	return entrys
 }
+const outdir = join(rootPath, 'dist')
 build({
 	entryPoints: getTSFile(join(rootPath, 'src')),
-	outdir: join(rootPath, 'dist'),
+	outdir,
 	format: 'cjs',
 	tsconfig: join(rootPath, 'tsconfig.json'),
 	plugins: [dtsPlugin()],
@@ -31,11 +39,30 @@ build({
 })
 	.then(() => {
 		console.log('>>>build success')
-		const banner = `require('module-alias/register');require('module-alias').addAliases({'@': require('path').resolve(__dirname)});\n`
-		const path = resolve(rootPath, 'dist/index.js')
-		const content = readFileSync(path, 'utf-8')
-		writeFileSync(path, banner + content)
-		rmSync(join(rootPath, 'pkg/README.md'))
+		const dts = join(rootPath, 'pkg/lua_codegen.d.ts')
+		if (existsSync(dts)) {
+			cpSync(dts, join(outdir, 'lua_codegen.d.ts'))
+		}
+		const bgWasm = join(rootPath, 'pkg/lua_codegen_bg.wasm')
+		if (existsSync(bgWasm)) {
+			cpSync(bgWasm, join(outdir, 'lua_codegen_bg.wasm'))
+		}
+		const jsFile = join(rootPath, 'pkg/lua_codegen.js')
+		if (existsSync(jsFile)) {
+			const content = readFileSync(jsFile, 'utf-8').replaceAll(
+				'require(`@/libs',
+				'require(`./libs'
+			)
+			writeFileSync(join(outdir, 'lua_codegen.js'), content)
+		}
+		const indexFile = join(outdir, 'index.js')
+		if (existsSync(jsFile)) {
+			const content = readFileSync(indexFile, 'utf-8').replace(
+				'require("../pkg/lua_codegen")',
+				'require("./lua_codegen")'
+			)
+			writeFileSync(indexFile, content)
+		}
 		console.log('>>>add banner success')
 	})
 	.catch(err => {
