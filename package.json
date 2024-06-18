@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test:dev": "tsx scripts/dev.ts",
+		"test:rm": "tsx scripts/dev.ts -d",
 		"test:prod": "node scripts/prod.js",
-		"clear:module": "tsx scripts/clear.ts name=student",
 		"build:script": "tsx scripts/build.ts",
 		"build:wasm": "wasm-pack build --target nodejs --release"
 	},
@@ -36,3 +36,4 @@
 		"ts-morph": "^22.0.0"
 	}
 }
+
