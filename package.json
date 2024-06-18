@@ -1,6 +1,6 @@
 {
-	"name": "lua-codegen",
-	"version": "0.1.0",
+	"name": "@biuxiu/codegen",
+	"version": "0.1.1",
 	"description": "代码生成工具",
 	"main": "index.js",
 	"scripts": {
