@@ -1,30 +1,114 @@
 import xiu from '@/render'
 import { join } from 'path'
-import { writeFormatFile } from '@/util'
+import { reFromatFile, writeFormatFile } from '@/util'
 import { existsSync, mkdirSync } from 'fs'
 import { ApiServiceField, DtoField, EntityField } from '@/types'
 import { DTOFromat } from '@/format/dto'
 import { EntityFormat } from '@/format/entity'
 import { ApiFormat } from '@/format/api'
 import { ServiceFormat } from '@/format/service'
+import { getApiDir } from '@/config'
+import { Project, SyntaxKind } from 'ts-morph'
+import { exec } from 'shelljs'
 
 export class GenApi {
-	#path: string
+	#moduleDir: string
 	#name: string
-	constructor(path: string, name: string) {
+	#path: string
+
+	constructor(name: string, path?: string) {
+		this.#path = path || name
+		const basePath = join(getApiDir(), this.#path)
+		if (!existsSync(basePath)) {
+			mkdirSync(basePath)
+		}
 		this.#name = name
-		this.#path = path
+		this.#moduleDir = basePath
+	}
+
+	remove() {
+		if (existsSync(this.#moduleDir)) {
+			exec(`rm -rf ${this.#moduleDir}`)
+		}
+		this.editAppModule(true)
+	}
+
+	editAppModule(isDelete = false) {
+		const moudleName = `${this.#name[0].toUpperCase() + this.#name.slice(1)}Module`
+		const appModuleFile = join(getApiDir(), 'app.module.ts')
+		if (existsSync(appModuleFile)) {
+			const source = new Project().addSourceFileAtPath(appModuleFile)
+
+			const moduleImport = source.getImportDeclaration(
+				`./${this.#path}/${this.#name}.module`
+			)
+			const appModuleClass = source.getClassOrThrow('AppModule')
+			const importsArray = appModuleClass
+				.getDecoratorOrThrow('Module')
+				.getArguments()[0]
+				.asKindOrThrow(SyntaxKind.ObjectLiteralExpression)
+				.getPropertyOrThrow('imports')
+				.getFirstChildByKindOrThrow(SyntaxKind.ArrayLiteralExpression)
+			const consumerStatement = appModuleClass
+				.getMethodOrThrow('configure')
+				.getStatements()[0]
+			if (isDelete) {
+				if (moduleImport) {
+					moduleImport.remove()
+				}
+				importsArray.getElements().forEach((ele, index) => {
+					if (ele.getText() === moudleName) {
+						importsArray.removeElement(index)
+					}
+				})
+				const text = consumerStatement.getText()
+				if (text.includes(moudleName)) {
+					const newText = text.replace(moudleName, '')
+					consumerStatement.replaceWithText(newText)
+				}
+			} else {
+				if (!moduleImport) {
+					source.addImportDeclaration({
+						namedImports: [moudleName],
+						moduleSpecifier: `./${this.#path}/${this.#name}.module`
+					})
+				}
+				let hasModule = false
+				importsArray.getElements().forEach(ele => {
+					if (ele.getText() === moudleName) {
+						hasModule = true
+					}
+				})
+				if (!hasModule) {
+					importsArray.addElement(moudleName)
+				}
+				const text = consumerStatement.getText()
+				if (!text.includes(moudleName)) {
+					const newText = text.replace(
+						/\.forRoutes\(([^)]+)\)/,
+						`.forRoutes($1, ${moudleName})`
+					)
+					consumerStatement.replaceWithText(newText)
+				}
+			}
+			source.save().then(() => {
+				reFromatFile(appModuleFile)
+			})
+		}
 	}
 
 	async genModule() {
-		const modulePath = join(this.#path, `${this.#name}.module.ts`)
+		const modulePath = join(this.#moduleDir, `${this.#name}.module.ts`)
 		const moduleStr = await xiu.render('module', { name: this.#name })
 		writeFormatFile(modulePath, moduleStr)
 	}
 
 	async genApiService(apiService: ApiServiceField[]) {
-		const controllerPath = join(this.#path, `${this.#name}.controller.ts`)
-		const servicePath = join(this.#path, `${this.#name}.service.ts`)
+		const controllerPath = join(
+			this.#moduleDir,
+			`${this.#name}.controller.ts`
+		)
+		const servicePath = join(this.#moduleDir, `${this.#name}.service.ts`)
 		const [apiImport, apiContent] = new ApiFormat(
 			this.#name,
 			apiService
@@ -50,7 +134,7 @@ export class GenApi {
 	}
 
 	async genEntity(entity: EntityField[]) {
-		const entityDir = join(this.#path, 'entities')
+		const entityDir = join(this.#moduleDir, 'entities')
 		if (!existsSync(entityDir)) {
 			mkdirSync(entityDir)
 		}
@@ -65,7 +149,7 @@ export class GenApi {
 	}
 
 	async genDto(dto: DtoField[]) {
-		const dtoPath = join(this.#path, 'dto')
+		const dtoPath = join(this.#moduleDir, 'dto')
 		if (!existsSync(dtoPath)) {
 			mkdirSync(dtoPath)
 		}

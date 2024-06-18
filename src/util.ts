@@ -1,5 +1,10 @@
-import { writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { format, resolveConfig, resolveConfigFile } from 'prettier'
+
+export const reFromatFile = async (filePath: string) => {
+	const content = await readFile(filePath, 'utf-8')
+	writeFormatFile(filePath, content)
+}
 
 export const writeFormatFile = async (
 	filePath: string,

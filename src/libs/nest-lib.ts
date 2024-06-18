@@ -1,7 +1,5 @@
-import { join } from 'path'
-import { getApiDir } from '@/config'
-import { existsSync, mkdirSync } from 'fs'
 import { GenApi } from '@/code/nest'
+import { isReverse } from '@/config'
 import { ApiServiceField, DtoField, EntityField } from '@/types'
 
 export function genApiCode(
@@ -10,11 +8,12 @@ export function genApiCode(
 	entity: EntityField[],
 	apiService: ApiServiceField[]
 ) {
-	const basePath = join(getApiDir(), name)
-	if (!existsSync(basePath)) {
-		mkdirSync(basePath)
+	const api = new GenApi(name)
+	if (isReverse()) {
+		api.remove()
+		return
 	}
-	const api = new GenApi(basePath, name)
+	api.editAppModule()
 	api.genModule()
 	api.genDto(dto)
 	api.genEntity(entity)
