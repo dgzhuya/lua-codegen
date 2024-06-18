@@ -1,6 +1,6 @@
 import { build } from 'esbuild'
 import { dtsPlugin } from 'esbuild-plugin-d.ts'
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'fs'
+import { readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'fs'
 import { join, resolve } from 'path'
 import { cwd } from 'process'
 
@@ -35,6 +35,7 @@ build({
 		const path = resolve(rootPath, 'dist/index.js')
 		const content = readFileSync(path, 'utf-8')
 		writeFileSync(path, banner + content)
+		rmSync(join(rootPath, 'pkg/README.md'))
 		console.log('>>>add banner success')
 	})
 	.catch(err => {
