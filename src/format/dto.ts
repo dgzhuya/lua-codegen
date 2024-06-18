@@ -1,4 +1,4 @@
-import { DtoField } from '@/types'
+import { DtoField } from '../types'
 import { BaseFormat } from './base'
 
 export class DTOFromat extends BaseFormat<DtoField> {

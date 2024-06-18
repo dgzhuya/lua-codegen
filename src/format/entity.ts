@@ -1,4 +1,4 @@
-import { EntityField } from '@/types'
+import { EntityField } from '../types'
 import { BaseFormat } from './base'
 
 export class EntityFormat extends BaseFormat<EntityField> {

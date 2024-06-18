@@ -1,6 +1,6 @@
-import { RenderNest } from '@/code/nest'
-import { isReverse } from '@/config'
-import { ApiServiceField, DtoField, EntityField } from '@/types'
+import { RenderNest } from '../code/nest'
+import { isReverse } from '../config'
+import { ApiServiceField, DtoField, EntityField } from '../types'
 
 export function renderNestCode(
 	config: { name: string; path?: string },

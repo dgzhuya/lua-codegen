@@ -1,4 +1,4 @@
-import { ApiServiceField } from '@/types'
+import { ApiServiceField } from '../types'
 import { BaseFormat } from './base'
 
 export class ServiceFormat extends BaseFormat<ApiServiceField> {
