@@ -21,6 +21,7 @@
 	"author": "dgzhuya",
 	"license": "ISC",
 	"devDependencies": {
+		"@biuxiu/publish": "^1.2.11",
 		"@types/node": "^20.14.2",
 		"@types/shelljs": "^0.8.15",
 		"esbuild": "^0.21.5",
