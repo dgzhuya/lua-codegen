@@ -11,17 +11,48 @@ import { getApiDir } from '@/config'
 import { Project, SyntaxKind } from 'ts-morph'
 import { exec } from 'shelljs'
 
-export class GenApi {
+const editFileQueue: (() => Promise<void>)[] = []
+let isRunning = false
+const runEditTask = async () => {
+	if (!isRunning) {
+		isRunning = true
+		while (editFileQueue.length > 0) {
+			const fn = editFileQueue.shift()
+			if (fn) await fn()
+		}
+		isRunning = false
+	}
+}
+
+export class RenderNest {
 	#moduleDir: string
 	#name: string
 	#path: string
 
 	constructor(name: string, path?: string) {
 		this.#path = path || name
-		const basePath = join(getApiDir(), this.#path)
-		if (!existsSync(basePath)) {
-			mkdirSync(basePath)
+		let basePath = ''
+		const apiDir = getApiDir()
+		if (this.#path.includes('/')) {
+			const basePaths = this.#path.split('/')
+			for (let i = 0; i < basePaths.length; i++) {
+				const curPath = basePaths[i]
+				if (i === 0) {
+					basePath = join(apiDir, curPath)
+				} else {
+					basePath = join(basePath, curPath)
+				}
+				if (!existsSync(basePath)) {
+					mkdirSync(basePath)
+				}
+			}
+		} else {
+			basePath = join(apiDir, this.#path)
+			if (!existsSync(basePath)) {
+				mkdirSync(basePath)
+			}
 		}
+
 		this.#name = name
 		this.#moduleDir = basePath
 	}
@@ -34,67 +65,76 @@ export class GenApi {
 	}
 
 	editAppModule(isDelete = false) {
-		const moudleName = `${this.#name[0].toUpperCase() + this.#name.slice(1)}Module`
-		const appModuleFile = join(getApiDir(), 'app.module.ts')
-		if (existsSync(appModuleFile)) {
-			const source = new Project().addSourceFileAtPath(appModuleFile)
+		editFileQueue.push(async () => {
+			const moudleName = `${this.#name[0].toUpperCase() + this.#name.slice(1)}Module`
+			const appModuleFile = join(getApiDir(), 'app.module.ts')
+			if (existsSync(appModuleFile)) {
+				const source = new Project().addSourceFileAtPath(appModuleFile)
 
-			const moduleImport = source.getImportDeclaration(
-				`./${this.#path}/${this.#name}.module`
-			)
-			const appModuleClass = source.getClassOrThrow('AppModule')
-			const importsArray = appModuleClass
-				.getDecoratorOrThrow('Module')
-				.getArguments()[0]
-				.asKindOrThrow(SyntaxKind.ObjectLiteralExpression)
-				.getPropertyOrThrow('imports')
-				.getFirstChildByKindOrThrow(SyntaxKind.ArrayLiteralExpression)
-			const consumerStatement = appModuleClass
-				.getMethodOrThrow('configure')
-				.getStatements()[0]
-			if (isDelete) {
-				if (moduleImport) {
-					moduleImport.remove()
-				}
-				importsArray.getElements().forEach((ele, index) => {
-					if (ele.getText() === moudleName) {
-						importsArray.removeElement(index)
-					}
-				})
-				const text = consumerStatement.getText()
-				if (text.includes(moudleName)) {
-					const newText = text.replace(moudleName, '')
-					consumerStatement.replaceWithText(newText)
-				}
-			} else {
-				if (!moduleImport) {
-					source.addImportDeclaration({
-						namedImports: [moudleName],
-						moduleSpecifier: `./${this.#path}/${this.#name}.module`
-					})
-				}
-				let hasModule = false
-				importsArray.getElements().forEach(ele => {
-					if (ele.getText() === moudleName) {
-						hasModule = true
-					}
-				})
-				if (!hasModule) {
-					importsArray.addElement(moudleName)
-				}
-				const text = consumerStatement.getText()
-				if (!text.includes(moudleName)) {
-					const newText = text.replace(
-						/\.forRoutes\(([^)]+)\)/,
-						`.forRoutes($1, ${moudleName})`
+				const moduleImport = source.getImportDeclaration(
+					`./${this.#path}/${this.#name}.module`
+				)
+				const appModuleClass = source.getClassOrThrow('AppModule')
+				const importsArray = appModuleClass
+					.getDecoratorOrThrow('Module')
+					.getArguments()[0]
+					.asKindOrThrow(SyntaxKind.ObjectLiteralExpression)
+					.getPropertyOrThrow('imports')
+					.getFirstChildByKindOrThrow(
+						SyntaxKind.ArrayLiteralExpression
 					)
-					consumerStatement.replaceWithText(newText)
+				const consumerStatement = appModuleClass
+					.getMethodOrThrow('configure')
+					.getStatements()[0]
+				if (isDelete) {
+					if (moduleImport) {
+						moduleImport.remove()
+					}
+					importsArray.getElements().forEach((ele, index) => {
+						if (ele.getText() === moudleName) {
+							importsArray.removeElement(index)
+						}
+					})
+					const text = consumerStatement.getText()
+					if (text.includes(moudleName)) {
+						console.log('text: ', text)
+						const newText = text.replace(
+							new RegExp(`,\\s*${moudleName}`),
+							''
+						)
+						console.log('newText: ', newText)
+						consumerStatement.replaceWithText(newText)
+					}
+				} else {
+					if (!moduleImport) {
+						source.addImportDeclaration({
+							namedImports: [moudleName],
+							moduleSpecifier: `./${this.#path}/${this.#name}.module`
+						})
+					}
+					let hasModule = false
+					importsArray.getElements().forEach(ele => {
+						if (ele.getText() === moudleName) {
+							hasModule = true
+						}
+					})
+					if (!hasModule) {
+						importsArray.addElement(moudleName)
+					}
+					const text = consumerStatement.getText()
+					if (!text.includes(moudleName)) {
+						const newText = text.replace(
+							/\.forRoutes\(([^)]+)\)/,
+							`.forRoutes($1, ${moudleName})`
+						)
+						consumerStatement.replaceWithText(newText)
+					}
 				}
+				await source.save()
+				await reFromatFile(appModuleFile)
 			}
-			source.save().then(() => {
-				reFromatFile(appModuleFile)
-			})
-		}
+		})
+		runEditTask()
 	}
 
 	async genModule() {
