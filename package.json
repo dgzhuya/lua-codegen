@@ -2,7 +2,7 @@
 	"name": "@biuxiu/codegen",
 	"version": "0.1.7",
 	"description": "代码生成工具",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"test:dev": "tsx scripts/dev.ts",
 		"test:rm": "tsx scripts/dev.ts -d",
