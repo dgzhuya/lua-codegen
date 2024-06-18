@@ -1,6 +1,6 @@
 {
 	"name": "lua-codegen",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "代码生成工具",
 	"main": "index.js",
 	"scripts": {
@@ -8,7 +8,8 @@
 		"test:rm": "tsx scripts/dev.ts -d",
 		"test:prod": "node scripts/prod.js",
 		"build:script": "tsx scripts/build.ts",
-		"build:wasm": "wasm-pack build --target nodejs --release"
+		"build:wasm": "wasm-pack build --target nodejs --release",
+		"publish:x": "xiu -o -c -h 'npm run build:script' -n"
 	},
 	"files": [
 		"bin",
@@ -36,4 +37,3 @@
 		"ts-morph": "^22.0.0"
 	}
 }
-
