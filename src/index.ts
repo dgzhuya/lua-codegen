@@ -1,6 +1,7 @@
 import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
+import { genLuaTypes } from './gen-type'
 import { ConfigType, setConfig } from './config'
 
 async function startRun(filePath: string, config?: ConfigType) {
@@ -18,4 +19,4 @@ async function startRun(filePath: string, config?: ConfigType) {
 	}
 }
 
-export { startRun }
+export { startRun, genLuaTypes }
