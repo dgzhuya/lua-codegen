@@ -12,7 +12,7 @@
 		"publish:x": "xiu -o -c -h 'npm run build:script' -n"
 	},
 	"files": [
-		"bin",
+		"lua/bin",
 		"dist",
 		"pkg",
 		"sources",
