@@ -12,10 +12,10 @@ async function startRun(filePath: string, config?: ConfigType) {
 			const data = await compileToByte(filePath)
 			run(new Uint8Array(data), filePath)
 		} catch (error) {
-			console.error(error)
+			return Promise.reject(error)
 		}
 	} else {
-		console.error(`${filePath}文件存在`)
+		return Promise.reject(`${filePath}文件存在`)
 	}
 }
 
