@@ -1,6 +1,6 @@
-import { exec } from 'shelljs'
 import { resolve } from 'path'
 import { platform } from 'os'
+import { spawn } from 'child_process'
 
 const getPathName = () => {
 	switch (platform()) {
@@ -18,16 +18,20 @@ const getPathName = () => {
 export function compileToByte(filePath: string) {
 	const bin = resolve(__dirname, '../lua/bin', getPathName())
 	return new Promise<ArrayBuffer>((resolve, reject) => {
-		exec(
-			`${bin} -s -o - ${filePath}`,
-			{ silent: true, encoding: 'buffer' },
-			(code, out, err) => {
-				if (code === 0) {
-					resolve(out as any as Buffer)
-				} else {
-					reject(err.toString())
-				}
+		const binaryData: Uint8Array[] = []
+		const child = spawn(bin, ['-s', '-o', '-', filePath])
+		child.stdout.on('data', data => {
+			binaryData.push(data)
+		})
+		child.on('close', code => {
+			if (code !== 0) {
+				reject(`子进程退出,code=${code}`)
+			} else {
+				resolve(Buffer.concat(binaryData))
 			}
-		)
+		})
+		child.on('error', err => {
+			reject(err.toString())
+		})
 	})
 }
