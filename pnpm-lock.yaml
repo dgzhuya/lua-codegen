@@ -17,9 +17,6 @@ importers:
       prettier:
         specifier: ^3.3.2
         version: 3.3.2
-      shelljs:
-        specifier: ^0.8.5
-        version: 0.8.5
       ts-morph:
         specifier: ^22.0.0
         version: 22.0.0
@@ -39,6 +36,9 @@ importers:
       esbuild-plugin-d.ts:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.4.5)
+      shelljs:
+        specifier: ^0.8.5
+        version: 0.8.5
       tsx:
         specifier: ^4.15.1
         version: 4.15.1

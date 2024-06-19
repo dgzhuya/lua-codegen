@@ -23,6 +23,7 @@
 		"@types/shelljs": "^0.8.15",
 		"esbuild": "^0.21.5",
 		"esbuild-plugin-d.ts": "^1.2.3",
+		"shelljs": "^0.8.5",
 		"tsx": "^4.15.1",
 		"typescript": "^5.4.5"
 	},
@@ -30,7 +31,6 @@
 		"@biuxiu/template": "^1.2.3",
 		"module-alias": "^2.2.3",
 		"prettier": "^3.3.2",
-		"shelljs": "^0.8.5",
 		"ts-morph": "^22.0.0"
 	}
 }
