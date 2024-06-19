@@ -4,12 +4,11 @@
 	"description": "代码生成工具",
 	"main": "dist/index.js",
 	"scripts": {
+		"build": "tsx scripts/build.ts",
 		"test:dev": "tsx scripts/dev.ts",
-		"test:rm": "tsx scripts/dev.ts -d",
-		"test:prod": "node scripts/prod.js",
-		"build:script": "tsx scripts/build.ts",
+		"test:move": "tsx scripts/dev.ts -d",
 		"build:wasm": "wasm-pack build --target nodejs --release",
-		"publish:x": "xiu -o -c -h 'npm run build:script' -n"
+		"publish:x": "xiu -o -c -b -n"
 	},
 	"files": [
 		"dist",
