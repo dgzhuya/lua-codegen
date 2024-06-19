@@ -33,7 +33,7 @@ const outDir = join(rootPath, 'dist')
 build({
 	entryPoints: getTSFile(join(rootPath, 'src')),
 	outdir: outDir,
-	format: 'cjs',
+	format: 'esm',
 	tsconfig: join(rootPath, 'tsconfig.json'),
 	plugins: [dtsPlugin()],
 	platform: 'node'
@@ -58,15 +58,7 @@ build({
 					}
 					const jsFile = join(distPkg, 'lua_codegen.js')
 					if (existsSync(jsFile)) {
-						let content = readFileSync(jsFile, 'utf-8').replaceAll(
-							'require(`@/libs',
-							'require(`./libs'
-						)
-						content = content.replace(
-							"require('path').join(__dirname, 'lua_codegen_bg.wasm')",
-							"require('./lua_codegen_bg.wasm')"
-						)
-						writeFileSync(join(outDir, 'lua_codegen.js'), content)
+						cpSync(jsFile, join(outDir, 'lua_codegen.js'))
 					}
 					const bgJsFile = join(distPkg, 'lua_codegen_bg.js')
 					if (existsSync(bgJsFile)) {
@@ -81,15 +73,10 @@ build({
 					}
 					const indexFile = join(outDir, 'index.js')
 					if (existsSync(jsFile)) {
-						let content = readFileSync(indexFile, 'utf-8')
-						content = content.replace(
-							'var import_lua_codegen = require("./lua_codegen");\n',
-							''
-						)
-						content = content.replace(
-							'(0, import_lua_codegen.run)',
-							'(await import("./lua_codegen")).run'
-						)
+						const content = readFileSync(
+							indexFile,
+							'utf-8'
+						).replace('../pkg/lua_codegen', './lua_codegen')
 						writeFileSync(indexFile, content)
 					}
 					console.log('>>>set file success')
