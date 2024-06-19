@@ -12,9 +12,7 @@
 		"publish:x": "xiu -o -c -h 'npm run build:script' -n"
 	},
 	"files": [
-		"lua/bin",
 		"dist",
-		"sources",
 		"README.md"
 	],
 	"keywords": [],

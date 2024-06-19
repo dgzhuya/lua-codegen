@@ -81,12 +81,14 @@ build({
 					}
 					const indexFile = join(outDir, 'index.js')
 					if (existsSync(jsFile)) {
-						const content = readFileSync(
-							indexFile,
-							'utf-8'
-						).replace(
-							'require("../pkg/lua_codegen")',
-							'require("./lua_codegen")'
+						let content = readFileSync(indexFile, 'utf-8')
+						content = content.replace(
+							'var import_lua_codegen = require("./lua_codegen");\n',
+							''
+						)
+						content = content.replace(
+							'(0, import_lua_codegen.run)',
+							'(await import("./lua_codegen")).run'
 						)
 						writeFileSync(indexFile, content)
 					}
