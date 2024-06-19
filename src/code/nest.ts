@@ -78,6 +78,7 @@ export class RenderNest {
 				await unlink(filePath)
 			}
 		}
+		rmdir(path)
 	}
 
 	remove() {
