@@ -42,29 +42,9 @@ export class RenderNest {
 				? `${this.#formatPath(path)}/${name}`
 				: this.#formatPath(path)
 			: name
-		let basePath = ''
 		const apiDir = getApiDir()
-		if (this.#path.includes('/')) {
-			const pathArr = this.#path.split('/')
-			for (let i = 0; i < pathArr.length; i++) {
-				const curPath = pathArr[i]
-				if (i === 0) {
-					basePath = join(apiDir, curPath)
-				} else {
-					basePath = join(basePath, curPath)
-				}
-				if (!existsSync(basePath)) {
-					mkdirSync(basePath)
-				}
-			}
-		} else {
-			basePath = join(apiDir, this.#path)
-			if (!existsSync(basePath)) {
-				mkdirSync(basePath)
-			}
-		}
 		this.#name = name
-		this.#moduleDir = basePath
+		this.#moduleDir = join(apiDir, this.#path)
 	}
 
 	async #deleteDir(path: string) {
@@ -89,6 +69,29 @@ export class RenderNest {
 	}
 
 	editAppModule(isDelete = false) {
+		if (!isDelete) {
+			let basePath = ''
+			const apiDir = getApiDir()
+			if (this.#path.includes('/')) {
+				const pathArr = this.#path.split('/')
+				for (let i = 0; i < pathArr.length; i++) {
+					const curPath = pathArr[i]
+					if (i === 0) {
+						basePath = join(apiDir, curPath)
+					} else {
+						basePath = join(basePath, curPath)
+					}
+					if (!existsSync(basePath)) {
+						mkdirSync(basePath)
+					}
+				}
+			} else {
+				basePath = join(apiDir, this.#path)
+				if (!existsSync(basePath)) {
+					mkdirSync(basePath)
+				}
+			}
+		}
 		editFileQueue.push(async () => {
 			const moudleName = `${this.#name[0].toUpperCase() + this.#name.slice(1)}Module`
 			const appModuleFile = join(getApiDir(), 'app.module.ts')
