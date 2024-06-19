@@ -10,6 +10,7 @@ import {
 } from 'fs'
 import { join } from 'path'
 import { cwd } from 'process'
+import { exec } from 'shelljs'
 
 const rootPath = cwd()
 
@@ -28,10 +29,10 @@ export const getTSFile = (path: string) => {
 	}
 	return entrys
 }
-const outdir = join(rootPath, 'dist')
+const outDir = join(rootPath, 'dist')
 build({
 	entryPoints: getTSFile(join(rootPath, 'src')),
-	outdir,
+	outdir: outDir,
 	format: 'cjs',
 	tsconfig: join(rootPath, 'tsconfig.json'),
 	plugins: [dtsPlugin()],
@@ -39,35 +40,64 @@ build({
 })
 	.then(() => {
 		console.log('>>>build success')
-		const dts = join(rootPath, 'pkg/lua_codegen.d.ts')
-		if (existsSync(dts)) {
-			cpSync(dts, join(outdir, 'lua_codegen.d.ts'))
-		}
-		const bgWasm = join(rootPath, 'pkg/lua_codegen_bg.wasm')
-		if (existsSync(bgWasm)) {
-			cpSync(bgWasm, join(outdir, 'lua_codegen_bg.wasm'))
-		}
-		const jsFile = join(rootPath, 'pkg/lua_codegen.js')
-		if (existsSync(jsFile)) {
-			let content = readFileSync(jsFile, 'utf-8').replaceAll(
-				'require(`@/libs',
-				'require(`./libs'
-			)
-			content = content.replace(
-				"require('path').join(__dirname, 'lua_codegen_bg.wasm')",
-				"require('./lua_codegen_bg.wasm')"
-			)
-			writeFileSync(join(outdir, 'lua_codegen.js'), content)
-		}
-		const indexFile = join(outdir, 'index.js')
-		if (existsSync(jsFile)) {
-			const content = readFileSync(indexFile, 'utf-8').replace(
-				'require("../pkg/lua_codegen")',
-				'require("./lua_codegen")'
-			)
-			writeFileSync(indexFile, content)
-		}
-		console.log('>>>set file success')
+		exec(
+			'wasm-pack build -d dist/pkg --release',
+			{
+				cwd: rootPath
+			},
+			code => {
+				if (code === 0) {
+					const distPkg = join(outDir, 'pkg')
+					const dts = join(distPkg, 'lua_codegen.d.ts')
+					if (existsSync(dts)) {
+						cpSync(dts, join(outDir, 'lua_codegen.d.ts'))
+					}
+					const bgWasm = join(distPkg, 'lua_codegen_bg.wasm')
+					if (existsSync(bgWasm)) {
+						cpSync(bgWasm, join(outDir, 'lua_codegen_bg.wasm'))
+					}
+					const jsFile = join(distPkg, 'lua_codegen.js')
+					if (existsSync(jsFile)) {
+						let content = readFileSync(jsFile, 'utf-8').replaceAll(
+							'require(`@/libs',
+							'require(`./libs'
+						)
+						content = content.replace(
+							"require('path').join(__dirname, 'lua_codegen_bg.wasm')",
+							"require('./lua_codegen_bg.wasm')"
+						)
+						writeFileSync(join(outDir, 'lua_codegen.js'), content)
+					}
+					const bgJsFile = join(distPkg, 'lua_codegen_bg.js')
+					if (existsSync(bgJsFile)) {
+						let content = readFileSync(
+							bgJsFile,
+							'utf-8'
+						).replaceAll('@/libs', './libs')
+						writeFileSync(
+							join(outDir, 'lua_codegen_bg.js'),
+							content
+						)
+					}
+					const indexFile = join(outDir, 'index.js')
+					if (existsSync(jsFile)) {
+						const content = readFileSync(
+							indexFile,
+							'utf-8'
+						).replace(
+							'require("../pkg/lua_codegen")',
+							'require("./lua_codegen")'
+						)
+						writeFileSync(indexFile, content)
+					}
+					console.log('>>>set file success')
+					exec(`rm -rf ${distPkg}`)
+					console.log('>>>clear dist pkg')
+				} else {
+					console.log('>>>build wasm error')
+				}
+			}
+		)
 	})
 	.catch(err => {
 		console.log('>>>build error start')
