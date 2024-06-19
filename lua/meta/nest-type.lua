@@ -1,26 +1,26 @@
---- @meta NestJs
+--- @meta Nest
 
---- @class NestJs
-NestJs = {}
+--- @class Nest
+Nest = {}
 
 --- @alias SetTblFn fun(tbl: table)
 
---- 生成限制规则
+--- 生成DTO字段长度或者数字大小
 ---
 --- @param msg string 消息提示
 --- @param min number | nil  最小值
 --- @param max number | nil 最大值
 --- @return SetTblFn
-function NestJs.createLimitRule(msg, min, max) end
+function Nest.limit(msg, min, max) end
 
 --- @alias SimpleRuleType 'isOptional' | 'notEmpty' | 'isInt' | 'isNumber'
 
---- 生成简单规则
+--- 生成DTO
 ---
 --- @param key SimpleRuleType 规则类型
 --- @param msg string | true 消息提示
 --- @return SetTblFn
-function NestJs.createSimpleRule(key, msg) end
+function Nest.rule(key, msg) end
 
 --- @class DtoField
 --- @field key string
@@ -32,7 +32,7 @@ function NestJs.createSimpleRule(key, msg) end
 --- @param type FieldType 字段类型
 --- @param ... SetTblFn 字段规则函数
 --- @return DtoField
-function NestJs.creteDtoField(key, type, ...) end
+function Nest.dto(key, type, ...) end
 
 --- @alias SimpleColumnType 'isExclude' | 'comment' | 'length' | 'nullable' | 'name'
 
@@ -41,13 +41,13 @@ function NestJs.creteDtoField(key, type, ...) end
 --- @param key SimpleColumnType 特征名
 --- @param value number | string | true 字段值
 --- @return SetTblFn
-function NestJs.createSimpleColumn(key, value) end
+function Nest.column(key, value) end
 
 --- 创建字段表类型
 ---
 --- @param type 'int' | 'datetime' | 'varchar' | 'tinyint' 表类型
 --- @return SetTblFn
-function NestJs.creteColumnType(type) end
+function Nest.cType(type) end
 
 --- @class EntityField
 --- @field key string
@@ -60,7 +60,7 @@ function NestJs.creteColumnType(type) end
 --- @param type FieldType 字段类型
 --- @param ... SetTblFn 字段数据库类型
 --- @return EntityField
-function NestJs.creteEntityField(key, type, ...) end
+function Nest.entity(key, type, ...) end
 
 --- @alias ApiServiceFieldKey 'get' | 'all' | 'delete' | 'update' | 'add'
 
@@ -73,7 +73,7 @@ function NestJs.creteEntityField(key, type, ...) end
 --- @param key ApiServiceFieldKey
 --- @param interceptor true | nil
 --- @return ApiServiceField
-function NestJs.createApiService(key, interceptor) end
+function Nest.service(key, interceptor) end
 
 --- @class RenderConfig
 --- @field name string
@@ -81,8 +81,8 @@ function NestJs.createApiService(key, interceptor) end
 
 --- 创建后端代码
 ---
---- @param config RenderConfig 模块名
---- @param dto  DtoField[]  dto数据结构
 --- @param entity EntityField[] entity数据结构
+--- @param dto  DtoField[]  dto数据结构
 --- @param apiService ApiServiceField[] entity数据结构
-function NestJs.renderToCode(config, dto, entity, apiService) end
+--- @param config RenderConfig 模块名
+function Nest.render(entity, dto, apiService, config) end

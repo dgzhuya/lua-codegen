@@ -1,5 +1,5 @@
-mod nestjs_lib;
-mod vuejs_lib;
+mod nest_lib;
+mod vue_lib;
 
 use gloo_utils::format::JsValueSerdeExt;
 use neige_lua::{
@@ -7,8 +7,8 @@ use neige_lua::{
     state::LuaState,
     LuaValue,
 };
-use nestjs_lib::LuaNestLib;
-use vuejs_lib::LuaVueLib;
+use nest_lib::LuaNestLib;
+use vue_lib::LuaVueLib;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 #[wasm_bindgen(module = "@/libs")]

@@ -17,8 +17,8 @@ impl LuaVueLib for LuaState {
     fn vuejs_lib(&mut self) {
         self.create_table(0, 1);
         self.push_rust_fn(gen_web_code);
-        self.set_field(-2, "genWebCode");
-        self.set_global("VueJs");
+        self.set_field(-2, "render");
+        self.set_global("Vue");
     }
 }
 

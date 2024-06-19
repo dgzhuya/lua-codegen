@@ -18,25 +18,25 @@ impl LuaNestLib for LuaState {
     fn nestjs_lib(&mut self) {
         self.create_table(0, 1);
         self.push_rust_fn(gen_api_code);
-        self.set_field(-2, "renderToCode");
+        self.set_field(-2, "render");
 
         self.push_rust_fn(crete_field);
-        self.set_field(-2, "creteDtoField");
+        self.set_field(-2, "dto");
         self.push_rust_fn(create_field_limit);
-        self.set_field(-2, "createLimitRule");
+        self.set_field(-2, "limit");
         self.push_rust_fn(create_field_simple);
-        self.set_field(-2, "createSimpleRule");
+        self.set_field(-2, "rule");
 
         self.push_rust_fn(crete_field);
-        self.set_field(-2, "creteEntityField");
+        self.set_field(-2, "entity");
         self.push_rust_fn(create_field_simple);
-        self.set_field(-2, "createSimpleColumn");
+        self.set_field(-2, "column");
         self.push_rust_fn(create_column_type);
-        self.set_field(-2, "creteColumnType");
+        self.set_field(-2, "cType");
 
         self.push_rust_fn(gen_api_service_field);
-        self.set_field(-2, "createApiService");
-        self.set_global("NestJs");
+        self.set_field(-2, "service");
+        self.set_global("Nest");
     }
 }
 

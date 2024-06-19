@@ -1,7 +1,7 @@
----@meta VueJs
+---@meta Vue
 
---- @class VueJs
-VueJs = {}
+--- @class Vue
+Vue = {}
 
 --- @class WebRoute 前端路由信息
 --- @field path string 路由路径
@@ -24,4 +24,4 @@ VueJs = {}
 
 
 
-function VueJs.genWebCode(route, tbl) end
+function Vue.render(route, tbl) end
