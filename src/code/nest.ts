@@ -1,7 +1,7 @@
 import xiu from '../render'
 import { join } from 'path'
 import { reFromatFile, writeFormatFile } from '../util'
-import { existsSync, mkdirSync } from 'fs'
+import { existsSync, mkdirSync, statSync } from 'fs'
 import { ApiServiceField, DtoField, EntityField } from '../types'
 import { DTOFromat } from '../format/dto'
 import { EntityFormat } from '../format/entity'
@@ -9,7 +9,7 @@ import { ApiFormat } from '../format/api'
 import { ServiceFormat } from '../format/service'
 import { getApiDir } from '../config'
 import { Project, SyntaxKind } from 'ts-morph'
-import { exec } from 'shelljs'
+import { readdir, rmdir, unlink } from 'fs/promises'
 
 const editFileQueue: (() => Promise<void>)[] = []
 let isRunning = false
@@ -67,9 +67,22 @@ export class RenderNest {
 		this.#moduleDir = basePath
 	}
 
+	async #deleteDir(path: string) {
+		const files = await readdir(path)
+		for (let i = 0; i < files.length; i++) {
+			const filePath = join(path, files[i])
+			if (statSync(filePath).isDirectory()) {
+				await this.#deleteDir(filePath)
+				await rmdir(filePath)
+			} else {
+				await unlink(filePath)
+			}
+		}
+	}
+
 	remove() {
 		if (existsSync(this.#moduleDir)) {
-			exec(`rm -rf ${this.#moduleDir}`)
+			this.#deleteDir(this.#moduleDir)
 		}
 		this.editAppModule(true)
 	}
