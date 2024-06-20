@@ -6,7 +6,7 @@ const CodegenConfig = {
 	reverse: false
 }
 
-export type ConfigType = Partial<typeof CodegenConfig>
+export type ConfigType = Omit<Partial<typeof CodegenConfig>, 'reverse'>
 
 export function setConfig(config: ConfigType) {
 	if (config.webDir) {
@@ -15,10 +15,10 @@ export function setConfig(config: ConfigType) {
 	if (config.apiDir) {
 		CodegenConfig.apiDir = config.apiDir
 	}
-	if (config.reverse !== undefined) {
-		CodegenConfig.reverse = config.reverse
-	}
 }
+
+export const setReverse = (reverse: boolean) =>
+	(CodegenConfig.reverse = reverse)
 
 export const getWebDir = () => CodegenConfig.webDir
 export const getApiDir = () => CodegenConfig.apiDir

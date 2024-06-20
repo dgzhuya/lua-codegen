@@ -2,10 +2,15 @@ import { compileToByte } from './compile'
 import { existsSync } from 'fs'
 import { run } from '../pkg/lua_codegen'
 import { genLuaTypes } from './gen-type'
-import { ConfigType, setConfig } from './config'
+import { ConfigType, setConfig, setReverse } from './config'
 
-async function startRun(filePath: string, config?: ConfigType) {
+async function startRun(
+	filePath: string,
+	isReverse: boolean,
+	config?: ConfigType
+) {
 	if (config) setConfig(config)
+	setReverse(isReverse)
 
 	if (existsSync(filePath)) {
 		try {
@@ -19,4 +24,12 @@ async function startRun(filePath: string, config?: ConfigType) {
 	}
 }
 
-export { startRun, genLuaTypes }
+const startGen = (filePath: string, config?: ConfigType) => {
+	return startRun(filePath, true, config)
+}
+
+const startRemove = (filePath: string, config?: ConfigType) => {
+	return startRun(filePath, false, config)
+}
+
+export { startGen, startRemove, genLuaTypes }
