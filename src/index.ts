@@ -6,11 +6,11 @@ import { ConfigType, setConfig, setReverse } from './config'
 
 async function startRun(
 	filePath: string,
-	isReverse: boolean,
+	isDelete: boolean,
 	config?: ConfigType
 ) {
 	if (config) setConfig(config)
-	setReverse(isReverse)
+	setReverse(isDelete)
 
 	if (existsSync(filePath)) {
 		try {
@@ -25,11 +25,11 @@ async function startRun(
 }
 
 const startGen = (filePath: string, config?: ConfigType) => {
-	return startRun(filePath, true, config)
+	return startRun(filePath, false, config)
 }
 
 const startRemove = (filePath: string, config?: ConfigType) => {
-	return startRun(filePath, false, config)
+	return startRun(filePath, true, config)
 }
 
 export { startGen, startRemove, genLuaTypes }
