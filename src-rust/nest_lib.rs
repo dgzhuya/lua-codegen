@@ -34,19 +34,23 @@ impl LuaNestLib for LuaState {
         self.push_rust_fn(create_column_type);
         self.set_field(-2, "cType");
 
-        self.push_rust_fn(gen_api_service_field);
+        self.push_rust_fn(service_field);
         self.set_field(-2, "service");
         self.set_global("Nest");
     }
 }
 
-fn gen_api_service_field(ls: &mut dyn LuaApi) -> usize {
+fn service_field(ls: &mut dyn LuaApi) -> usize {
     ls.create_table(0, 1);
     if ls.is_string(1) {
         ls.push_value(1);
         ls.set_field(-2, "key")
     }
     if ls.is_boolean(2) {
+        ls.push_boolean(true);
+        ls.set_field(-2, "noAuth")
+    }
+    if ls.is_boolean(3) {
         ls.push_boolean(true);
         ls.set_field(-2, "interceptor")
     }

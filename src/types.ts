@@ -23,4 +23,5 @@ export type EntityField = FieldSchema & {
 export type ApiServiceField = {
 	key: 'get' | 'all' | 'delete' | 'update' | 'add'
 	interceptor?: true
+	noAuth?: true
 }

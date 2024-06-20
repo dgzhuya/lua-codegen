@@ -62,18 +62,19 @@ function Nest.cType(type) end
 --- @return EntityField
 function Nest.entity(key, type, ...) end
 
---- @alias ApiServiceFieldKey 'get' | 'all' | 'delete' | 'update' | 'add'
+--- @alias ServiceFieldKey 'get' | 'all' | 'delete' | 'update' | 'add'
 
---- @class ApiServiceField
---- @field key ApiServiceFieldKey
+--- @class ServiceField
+--- @field key ServiceFieldKey
 --- @field interceptor true
 
 --- 创建请求API和服务结构体
 ---
---- @param key ApiServiceFieldKey
---- @param interceptor true | nil
---- @return ApiServiceField
-function Nest.service(key, interceptor) end
+--- @param key ServiceFieldKey 请求方法类型
+--- @param noAuth true | nil 是否需要验证
+--- @param interceptor true | nil 是否需要过滤数据
+--- @return ServiceField
+function Nest.service(key, noAuth, interceptor) end
 
 --- @class RenderConfig
 --- @field name string
@@ -81,8 +82,8 @@ function Nest.service(key, interceptor) end
 
 --- 创建后端代码
 ---
+--- @param config RenderConfig 模块名
 --- @param entity EntityField[] entity数据结构
 --- @param dto  DtoField[]  dto数据结构
---- @param apiService ApiServiceField[] entity数据结构
---- @param config RenderConfig 模块名
-function Nest.render(entity, dto, apiService, config) end
+--- @param apiService ServiceField[] entity数据结构
+function Nest.render(config, entity, dto, apiService) end

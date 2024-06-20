@@ -3,6 +3,7 @@ import { BaseFormat } from './base'
 
 export class ApiFormat extends BaseFormat<ApiServiceField> {
 	#hasInterceptor = false
+	#isNoAuth = false
 	#moudleName: string
 	#upperName: string
 	#apiMap: Record<string, boolean> = {}
@@ -15,7 +16,7 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 	}
 
 	protected formatOnceStep(): void {
-		const { key, interceptor } = this.getCurSchema()
+		const { key, interceptor, noAuth } = this.getCurSchema()
 
 		if (this.#apiMap[key]) {
 			return
@@ -25,6 +26,11 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 		if (interceptor) {
 			this.#hasInterceptor = true
 			this.content += '\n@UseInterceptors(ClassSerializerInterceptor)\n'
+		}
+
+		if (noAuth) {
+			this.#isNoAuth = true
+			this.content += '\n@NoAuthToken()\n'
 		}
 
 		if (key === 'get') {
@@ -93,6 +99,11 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 		if (this.#apiMap['add'] || this.#apiMap['update']) {
 			this.#importCommon += 'Body,'
 		}
+
+		if (this.#isNoAuth) {
+			this.importInfo += `import { NoAuthToken } from '@api/common/utils/passport'`
+		}
+
 		if (this.#hasInterceptor) {
 			this.#importCommon += 'UseInterceptors,ClassSerializerInterceptor,'
 		}

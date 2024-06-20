@@ -3,10 +3,10 @@ import { isReverse } from '../config'
 import { ApiServiceField, DtoField, EntityField } from '../types'
 
 export function renderNestCode(
+	config: { name: string; path?: string },
 	entity: EntityField[],
 	dto: DtoField[],
-	apiService: ApiServiceField[],
-	config: { name: string; path?: string }
+	apiService: ApiServiceField[]
 ) {
 	const api = new RenderNest(config.name, config.path)
 	if (isReverse()) {
