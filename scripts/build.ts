@@ -80,7 +80,7 @@ build({
 						)
 						content = content.replace(
 							'run(new Uint8Array(data), filePath);',
-							'const { run } = await import("./lua_codegen");\nrun(new Uint8Array(data), filePath);'
+							'const { run } = await import("./lua_codegen");\n\t\t\trun(new Uint8Array(data), filePath);'
 						)
 						writeFileSync(indexFile, content)
 					}
