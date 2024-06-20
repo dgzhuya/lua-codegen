@@ -53,7 +53,6 @@ export class RenderNest {
 			const filePath = join(path, files[i])
 			if (statSync(filePath).isDirectory()) {
 				await this.#deleteDir(filePath)
-				await rmdir(filePath)
 			} else {
 				await unlink(filePath)
 			}
