@@ -101,7 +101,7 @@ export class ApiFormat extends BaseFormat<ApiServiceField> {
 		}
 
 		if (this.#isNoAuth) {
-			this.importInfo += `import { NoAuthToken } from '@api/common/utils/passport'`
+			this.importInfo += `import { NoAuthToken } from '@api/common/utils/passport'\n`
 		}
 
 		if (this.#hasInterceptor) {
