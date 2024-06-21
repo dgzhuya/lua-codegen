@@ -1,11 +1,15 @@
-import { startGen, startRemove } from '../src/index'
+import LuaCodeGen from '../src/index'
 import { resolve } from 'path'
 
 const isDelete = !!process.argv.slice(2)[0]
 
 const luaPath = resolve(__dirname, '../lua/tests/gen_api.lua')
 if (isDelete) {
-	startRemove(luaPath)
+	LuaCodeGen.startRemove(luaPath).catch(err => {
+		console.log('run err', err)
+	})
 } else {
-	startGen(luaPath)
+	LuaCodeGen.startGen(luaPath).catch(err => {
+		console.log('run err', err)
+	})
 }
