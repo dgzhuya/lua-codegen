@@ -57,17 +57,16 @@ export class RenderNest {
 				await unlink(filePath)
 			}
 		}
-		rmdir(path)
+		await rmdir(path)
 	}
 
-	remove() {
+	async remove() {
 		if (existsSync(this.#moduleDir)) {
-			this.#deleteDir(this.#moduleDir)
+			await this.#deleteDir(this.#moduleDir)
 		}
-		this.editAppModule(true)
 	}
 
-	editAppModule(isDelete = false) {
+	async editAppModule(isDelete = false) {
 		if (!isDelete) {
 			let basePath = ''
 			const apiDir = getApiDir()
@@ -158,13 +157,13 @@ export class RenderNest {
 				await reFromatFile(appModuleFile)
 			}
 		})
-		runEditTask()
+		await runEditTask()
 	}
 
 	async genModule() {
 		const modulePath = join(this.#moduleDir, `${this.#name}.module.ts`)
 		const moduleStr = await xiu.render('module', { name: this.#name })
-		writeFormatFile(modulePath, moduleStr)
+		await writeFormatFile(modulePath, moduleStr)
 	}
 
 	async genApiService(apiService: ApiServiceField[]) {
@@ -177,24 +176,26 @@ export class RenderNest {
 			this.#name,
 			apiService
 		).format()
-		xiu.render('controller', {
-			name: this.#name,
-			importInfo: apiImport,
-			content: apiContent
-		}).then(controllerStr => {
-			writeFormatFile(controllerPath, controllerStr)
-		})
 		const [serviceImport, serviceContent] = new ServiceFormat(
 			this.#name,
 			apiService
 		).format()
-		xiu.render('service', {
-			name: this.#name,
-			content: serviceContent,
-			importInfo: serviceImport
-		}).then(serviceStr => {
+		const [controllerStr, serviceStr] = await Promise.all([
+			xiu.render('controller', {
+				name: this.#name,
+				importInfo: apiImport,
+				content: apiContent
+			}),
+			xiu.render('service', {
+				name: this.#name,
+				content: serviceContent,
+				importInfo: serviceImport
+			})
+		])
+		await Promise.all([
+			writeFormatFile(controllerPath, controllerStr),
 			writeFormatFile(servicePath, serviceStr)
-		})
+		])
 	}
 
 	async genEntity(entity: EntityField[]) {
@@ -209,7 +210,7 @@ export class RenderNest {
 			importInfo,
 			content
 		})
-		writeFormatFile(entityPath, entityStr)
+		await writeFormatFile(entityPath, entityStr)
 	}
 
 	async genDto(dto: DtoField[]) {
@@ -220,15 +221,13 @@ export class RenderNest {
 		const createDtoPath = join(dtoPath, `create-${this.#name}.dto.ts`)
 		const updateDtoPath = join(dtoPath, `update-${this.#name}.dto.ts`)
 		const [importInfo, content] = new DTOFromat(dto).format()
-		const createDtoStr = await xiu.render('create-dto', {
-			importInfo,
-			name: this.#name,
-			content
-		})
-		const updateDtoStr = await xiu.render('update-dto', {
-			name: this.#name
-		})
-		writeFormatFile(createDtoPath, createDtoStr)
-		writeFormatFile(updateDtoPath, updateDtoStr)
+		const [createDtoStr, updateDtoStr] = await Promise.all([
+			xiu.render('create-dto', { importInfo, name: this.#name, content }),
+			xiu.render('update-dto', { name: this.#name })
+		])
+		await Promise.all([
+			writeFormatFile(createDtoPath, createDtoStr),
+			writeFormatFile(updateDtoPath, updateDtoStr)
+		])
 	}
 }

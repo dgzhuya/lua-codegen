@@ -3,7 +3,7 @@ import { format, resolveConfig, resolveConfigFile } from 'prettier'
 
 export const reFromatFile = async (filePath: string) => {
 	const content = await readFile(filePath, 'utf-8')
-	await writeFormatFile(filePath, content)
+	return writeFormatFile(filePath, content)
 }
 
 export const writeFormatFile = async (
@@ -20,6 +20,6 @@ export const writeFormatFile = async (
 		})
 		await writeFile(filePath, formatText)
 	} catch (error) {
-		console.log(error)
+		return Promise.reject(error)
 	}
 }
