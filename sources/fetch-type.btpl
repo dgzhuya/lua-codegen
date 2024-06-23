@@ -1,0 +1,43 @@
+import { TableParams } from '@web/types'
+import request from '@web/utils/request'
+
+export interface {% up@name %}Dto {
+    {% dotFieldStr %}
+}
+
+export interface {% up@name %}Model {
+	id: number
+    {% modelFieldStr %}
+	updateTime: string
+	createTime: string
+}
+
+export const get{% up@name %}List = (params: TableParams) => {
+	return request<{ total: number; list: {% up@name %}Model[] }>({
+		url: '/{% name %}',
+		params
+	})
+}
+
+export const create{% up@name %} = (data: {% up@name %}Dto) => {
+	return request({
+		url: '/{% name %}',
+		data,
+		method: 'post'
+	})
+}
+
+export const update{% up@name %} = (data: Partial<{% up@name %}Dto>, id: number) => {
+	return request({
+		url: `/{% name %}/${id}`,
+		data,
+		method: 'patch'
+	})
+}
+
+export const delete{% up@name %} = (id: number) => {
+	return request({
+		url: `/{% name %}/${id}`,
+		method: 'delete'
+	})
+}

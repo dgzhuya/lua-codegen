@@ -1,0 +1,54 @@
+<script lang="ts" setup>
+	import { get{% up@name %}List, delete{% up@name %}, {% up@name %}Model } from './{% name %}'
+	import {% up@name %}Form from './form.vue'
+	import { pageEffect } from '@web/effect/page'
+	import { showFormEffect } from '@web/effect/show-form'
+	import { deleteEffect } from '@web/effect/delete'
+	import { dateHandler } from '@web/utils/format'
+
+	const {% name %}Active = ref<{% up@name %}Model | null>(null)
+	const { tableData, size, page, total, pageHandler, sizeHandler, fetchHandler } = pageEffect(get{% up@name %}List)
+
+	const { showHandler, showModel, closeHandler } = showFormEffect({% name %}Active, fetchHandler)
+
+	const { deleteHandler } = deleteEffect(delete{% up@name %}, fetchHandler, '此{% comment %}')
+	onMounted(async () => {
+		await fetchHandler()
+	})
+</script>
+
+<template>
+	<div class="list-container">
+		<el-card class="list-header">
+			<el-button @click="showHandler()" type="primary">添加{% comment %}</el-button>
+		</el-card>
+		<el-card>
+			<el-table :data="tableData" border class="list-table-container">
+				{% tableStr %}
+				<el-table-column label="操作" fixed="right" width="260">
+					<template #default="{ row }">
+						<el-button type="primary" @click="showHandler(row)" size="small">编辑</el-button>
+						<el-button @click="deleteHandler(row.id)" type="danger" size="small">删除</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+
+			<el-pagination
+				class="pagination"
+				@size-change="sizeHandler"
+				@current-change="pageHandler"
+				:current-page="page"
+				:page-sizes="[2, 5, 10, 20]"
+				:page-size="size"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="total"
+			>
+			</el-pagination>
+		</el-card>
+		<{% up@name %}Form @close="closeHandler" :{% name %}="{% name %}Active" :show-form="showModel"></{% up@name %}Form>
+	</div>
+</template>
+
+<style lang="scss" scoped>
+	@import '@web/style/table.scss';
+</style>
