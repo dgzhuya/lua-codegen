@@ -1,7 +1,8 @@
 {
 	"Lua.workspace.library": [
 		"lua/meta/base-type.lua",
-		"lua/meta/nest-types.lua",
-		"lua/meta/vue-type.lua"
+		"lua/meta/dto-type.lua",
+		"lua/meta/entity-type.lua",
+		"lua/meta/api-type.lua"
 	]
 }
