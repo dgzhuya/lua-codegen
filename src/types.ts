@@ -1,6 +1,19 @@
-type FieldSchema = {
+export type FieldSchema = {
 	key: string
+	comment: string
 	type: 'string' | 'number' | 'bool'
+}
+
+export interface ModuleConfig {
+	name: string
+	comment: string
+	path?: string
+}
+
+export interface ModuleRoute {
+	path: string
+	icon: string
+	title: string
 }
 
 export type DtoField = FieldSchema & {
@@ -13,7 +26,6 @@ export type DtoField = FieldSchema & {
 
 export type EntityField = FieldSchema & {
 	isExclude?: true
-	comment?: string
 	length?: number
 	nullable?: true
 	name?: string
