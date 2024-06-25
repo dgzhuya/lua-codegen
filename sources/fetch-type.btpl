@@ -1,24 +1,26 @@
-import { TableParams } from '@web/types'
-import request from '@web/utils/request'
+{% if@all %}import { TableParams } from '@web/types'
+{% end@ %}{% if@requestImport %}import request from '@web/utils/request'
+{% end@ %} 
 
-export interface {% up@name %}Dto {
-    {% dotFieldStr %}
+export interface {% up@name %}Dto {{% for@filedList %}
+	{% $key %}:{% $type %} // {% $comment %}{% end@ %} 
 }
 
 export interface {% up@name %}Model {
-	id: number
-    {% modelFieldStr %}
-	updateTime: string
-	createTime: string
+	id: number // id{% for@filedList %}
+	{% $key %}:{% $type %} // {% $comment %}{% end@ %} 
+	updateTime: string // 更新时间
+	createTime: string // 创建时间
 }
 
+{% if@all %}
 export const get{% up@name %}List = (params: TableParams) => {
 	return request<{ total: number; list: {% up@name %}Model[] }>({
 		url: '/{% name %}',
 		params
 	})
 }
-
+{% end@ %}{% if@add %}
 export const create{% up@name %} = (data: {% up@name %}Dto) => {
 	return request({
 		url: '/{% name %}',
@@ -26,7 +28,7 @@ export const create{% up@name %} = (data: {% up@name %}Dto) => {
 		method: 'post'
 	})
 }
-
+{% end@ %}{% if@update %}
 export const update{% up@name %} = (data: Partial<{% up@name %}Dto>, id: number) => {
 	return request({
 		url: `/{% name %}/${id}`,
@@ -34,10 +36,11 @@ export const update{% up@name %} = (data: Partial<{% up@name %}Dto>, id: number)
 		method: 'patch'
 	})
 }
-
+{% end@ %}{% if@delete %}
 export const delete{% up@name %} = (id: number) => {
 	return request({
 		url: `/{% name %}/${id}`,
 		method: 'delete'
 	})
 }
+{% end@ %}

@@ -9,6 +9,7 @@ import {
 	ModuleConfig,
 	ModuleRoute
 } from './types'
+import { RenderVue } from './code/vue'
 
 export function renderNestCode(
 	config: { name: string; path?: string },
@@ -32,16 +33,24 @@ export function renderNestCode(
 	})
 }
 
+type FieldTuple = [string, FieldSchema['type'], string]
+
 export function renderVueCode(
 	config: ModuleConfig,
 	route: ModuleRoute,
-	fields: FieldSchema[],
+	fieldList: FieldTuple[],
 	api: ApiServiceField[]
 ) {
-	console.log(config)
-	console.log(route)
-	console.log(fields)
-	console.log(api)
+	console.log('route: ', route)
+	setTask(async () => {
+		const fields = fieldList.map(([key, type, comment]) => ({
+			key,
+			type,
+			comment
+		}))
+		const vue = new RenderVue(config.name, config.path)
+		await Promise.all([vue.genTsFile(fields, api)])
+	})
 }
 
 export function printToNode(info: any) {
