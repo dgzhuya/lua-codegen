@@ -1,6 +1,6 @@
 import { getWebDir } from '@/config'
 import xiu from '@/render'
-import { ApiServiceField, FieldSchema } from '@/types'
+import { ApiServiceField, FieldSchema, ModuleRoute } from '@/types'
 import { writeFormatFile } from '@/util'
 import { join } from 'path'
 
@@ -25,6 +25,12 @@ export class RenderVue {
 		const apiDir = getWebDir()
 		this.#name = name
 		this.#moduleDir = join(apiDir, this.#path)
+	}
+
+	async genRoute(route: ModuleRoute) {
+		const filePath = join(this.#moduleDir, 'meta.json')
+		const source = await xiu.render('route-mata', route)
+		await writeFormatFile(filePath, source, true)
 	}
 
 	async genTsFile(fields: FieldSchema[], api: ApiServiceField[]) {

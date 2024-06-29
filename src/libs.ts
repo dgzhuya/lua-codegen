@@ -41,7 +41,6 @@ export function renderVueCode(
 	fieldList: FieldTuple[],
 	api: ApiServiceField[]
 ) {
-	console.log('route: ', route)
 	setTask(async () => {
 		const fields = fieldList.map(([key, type, comment]) => ({
 			key,
@@ -49,7 +48,7 @@ export function renderVueCode(
 			comment
 		}))
 		const vue = new RenderVue(config.name, config.path)
-		await Promise.all([vue.genTsFile(fields, api)])
+		await Promise.all([vue.genTsFile(fields, api), vue.genRoute(route)])
 	})
 }
 
