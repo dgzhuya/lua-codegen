@@ -1,6 +1,6 @@
 import xiu from '../render'
 import { join } from 'path'
-import { reFromatFile, writeFormatFile } from '../util'
+import { writeFormatFile } from '../util'
 import { existsSync, mkdirSync, statSync } from 'fs'
 import { ApiServiceField, DtoField, EntityField } from '../types'
 import { DTOFromat } from '../format/dto'
@@ -153,8 +153,7 @@ export class RenderNest {
 						consumerStatement.replaceWithText(newText)
 					}
 				}
-				await source.save()
-				await reFromatFile(appModuleFile)
+				await writeFormatFile(appModuleFile, source.getFullText())
 			}
 		})
 		await runEditTask()
