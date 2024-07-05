@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-{%importInfo%}import { {%up@name%}Entity } from './entities/{%name%}.entity'
+{%importInfo%}import { {%up@[name]%}Entity } from './entities/{%name%}.entity'
 
 @Injectable()
-export class {%up@name%}Service {
-	constructor(@InjectRepository({%up@name%}Entity) private readonly {%name%}Repository: Repository<{%up@name%}Entity>) {}
+export class {%up@[name]%}Service {
+	constructor(@InjectRepository({%up@[name]%}Entity) private readonly {%name%}Repository: Repository<{%up@[name]%}Entity>) {}
 
 	{%content%}
 }

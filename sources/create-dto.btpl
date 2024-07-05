@@ -1,4 +1,4 @@
-{%importInfo%}
-export class Create{%up@name%}Dto {
-    {%content%}
+{% importInfo %}
+export class Create{% up@[name] %}Dto {
+    {% content %}
 }

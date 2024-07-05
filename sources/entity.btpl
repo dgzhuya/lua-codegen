@@ -1,8 +1,8 @@
 import { BaseEntity } from '@api/common/entities/base.entity'
 import { Column, Entity } from 'typeorm'
-{%importInfo%}
+{% importInfo %}
 
-@Entity('w_{%name%}')
-export class {%up@name%}Entity extends BaseEntity {
-    {%content%}
+@Entity('w_{% name %}')
+export class {% up@[name] %}Entity extends BaseEntity {
+    {% content %}
 }

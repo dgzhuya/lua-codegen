@@ -1,8 +1,8 @@
-import { {%up@name%}Service } from './{%name%}.service'
-{%importInfo%}
+import { {% up@[name] %}Service } from './{% name %}.service'
+{% importInfo %}
 
-@Controller('{%name%}')
-export class {%up@name%}Controller {
-	constructor(private readonly {%name%}Service: {%up@name%}Service) {}
-	{%content%}
+@Controller('{% name %}')
+export class {% up@[name] %}Controller {
+	constructor(private readonly {% name %}Service: {% up@[name] %}Service) {}
+	{% content %}
 }
