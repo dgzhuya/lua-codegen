@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-	import { get{% up@name %}List, delete{% up@name %}, {% up@name %}Model } from './{% name %}'
-	import {% up@name %}Form from './form.vue'
+	import { get{% up@[name] %}List, delete{% up@[name] %}, {% up@[name] %}Model } from './{% name %}'
+	import {% up@[name] %}Form from './form.vue'
 	import { pageEffect } from '@web/effect/page'
 	import { showFormEffect } from '@web/effect/show-form'
 	import { deleteEffect } from '@web/effect/delete'
 	import { dateHandler } from '@web/utils/format'
 
-	const {% name %}Active = ref<{% up@name %}Model | null>(null)
-	const { tableData, size, page, total, pageHandler, sizeHandler, fetchHandler } = pageEffect(get{% up@name %}List)
+	const {% name %}Active = ref<{% up@[name] %}Model | null>(null)
+	const { tableData, size, page, total, pageHandler, sizeHandler, fetchHandler } = pageEffect(get{% up@[name] %}List)
 
 	const { showHandler, showModel, closeHandler } = showFormEffect({% name %}Active, fetchHandler)
 
-	const { deleteHandler } = deleteEffect(delete{% up@name %}, fetchHandler, '此{% comment %}')
+	const { deleteHandler } = deleteEffect(delete{% up@[name] %}, fetchHandler, '此{% comment %}')
 	onMounted(async () => {
 		await fetchHandler()
 	})
@@ -45,7 +45,7 @@
 			>
 			</el-pagination>
 		</el-card>
-		<{% up@name %}Form @close="closeHandler" :{% name %}="{% name %}Active" :show-form="showModel"></{% up@name %}Form>
+		<{% up@[name] %}Form @close="closeHandler" :{% name %}="{% name %}Active" :show-form="showModel"></{% up@[name] %}Form>
 	</div>
 </template>
 

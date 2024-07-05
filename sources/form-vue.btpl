@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 	import { showToast } from '@web/utils/toast'
-	import { {% up@name %}Dto, {% up@name %}Model, create{% up@name %}, update{% up@name %} } from './{% name %}'
+	import { {% up@[name] %}Dto, {% up@[name] %}Model, create{% up@[name] %}, update{% up@[name] %} } from './{% name %}'
 	import { pickerKeyVal } from '@web/utils/pickerKeyVal'
 
-	const props = defineProps<{ {% name %}: {% up@name %}Model | null; showForm: boolean }>()
+	const props = defineProps<{ {% name %}: {% up@[name] %}Model | null; showForm: boolean }>()
 	const {% name %}Id = ref(-1)
-	const {% name %}Info = ref<Partial<{% up@name %}Dto>>({})
+	const {% name %}Info = ref<Partial<{% up@[name] %}Dto>>({})
 
 	watchEffect(async () => {
 		if (props.{% name %} !== null) {
@@ -27,9 +27,9 @@
 	const updateFn = async () => {
 		if (props.{% name %} === null) {
 			{% verifyHandler %}
-			await create{% up@name %}({% name %}Info.value as {% up@name %}Dto)
+			await create{% up@[name] %}({% name %}Info.value as {% up@[name] %}Dto)
 		} else {
-			await update{% up@name %}({% name %}Info.value, props.{% name %}.id)
+			await update{% up@[name] %}({% name %}Info.value, props.{% name %}.id)
 		}
 		closeHandler(true)
 	}

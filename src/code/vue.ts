@@ -42,10 +42,7 @@ export class RenderVue {
 			add: apiMathods.includes('add'),
 			delete: apiMathods.includes('delete'),
 			all: apiMathods.includes('all'),
-			update: apiMathods.includes('update'),
-			requestImport: apiMathods.some(k =>
-				['all', 'delete', 'update', 'add'].includes(k)
-			)
+			update: apiMathods.includes('update')
 		})
 		await writeFormatFile(filePath, source)
 	}
