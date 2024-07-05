@@ -9,11 +9,8 @@ importers:
   .:
     dependencies:
       '@biuxiu/template':
-        specifier: ^1.4.11
-        version: 1.4.11
-      module-alias:
-        specifier: ^2.2.3
-        version: 2.2.3
+        specifier: ^1.5.1
+        version: 1.5.1
       prettier:
         specifier: ^3.3.2
         version: 3.3.2
@@ -52,8 +49,8 @@ packages:
     resolution: {integrity: sha512-RS0MSf8Wbh+hdiva9xciIC/PKeiqBV32fpMe936g9SuIaLOxE259AKMFcxaS+53yOZ98elQBaunfJzjA1Ztfrw==}
     hasBin: true
 
-  '@biuxiu/template@1.4.11':
-    resolution: {integrity: sha512-KEhNuEsFCh3lyXN077axLlXaV9mQ7mQvucPqsQMwK/EZGYRXDBobliZRjXx4j3WK9BjkwaFrJe1FjofMZo3avw==}
+  '@biuxiu/template@1.5.1':
+    resolution: {integrity: sha512-yAbmJzQJtoTxNhYLZBCMRhZizrCjkdvDx5IG/A1z4rcyNSgNtIoXN1XrP0Tj4dm8jos22JkAm8ZIlsM8aofF1Q==}
     hasBin: true
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -451,13 +448,14 @@ packages:
     resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  minimatch@9.0.5:
+    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
+    engines: {node: '>=16 || 14 >=14.17'}
+
   mkdirp@3.0.1:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
     hasBin: true
-
-  module-alias@2.2.3:
-    resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
 
   mute-stream@1.0.0:
     resolution: {integrity: sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA==}
@@ -589,7 +587,7 @@ snapshots:
       prettier: 3.3.2
       shelljs: 0.8.5
 
-  '@biuxiu/template@1.4.11':
+  '@biuxiu/template@1.5.1':
     dependencies:
       prettier: 3.3.2
       ts-morph: 21.0.1
@@ -764,7 +762,7 @@ snapshots:
   '@ts-morph/common@0.22.0':
     dependencies:
       fast-glob: 3.3.2
-      minimatch: 9.0.4
+      minimatch: 9.0.5
       mkdirp: 3.0.1
       path-browserify: 1.0.1
 
@@ -983,9 +981,11 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  mkdirp@3.0.1: {}
+  minimatch@9.0.5:
+    dependencies:
+      brace-expansion: 2.0.1
 
-  module-alias@2.2.3: {}
+  mkdirp@3.0.1: {}
 
   mute-stream@1.0.0: {}
 
