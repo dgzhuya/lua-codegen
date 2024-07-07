@@ -28,7 +28,7 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@biuxiu/template": "^1.5.1",
+		"@biuxiu/template": "^1.5.2",
 		"prettier": "^3.3.2",
 		"ts-morph": "^22.0.0"
 	}
