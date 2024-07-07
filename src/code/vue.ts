@@ -1,6 +1,11 @@
 import { getWebDir } from '@/config'
 import xiu from '@/render'
-import { ApiServiceField, FieldSchema, ModuleRoute } from '@/types'
+import {
+	ApiServiceField,
+	FieldSchema,
+	ModuleConfig,
+	ModuleRoute
+} from '@/types'
 import { writeFormatFile } from '@/util'
 import { join } from 'path'
 
@@ -30,7 +35,21 @@ export class RenderVue {
 	async genRoute(route: ModuleRoute) {
 		const filePath = join(this.#moduleDir, 'meta.json')
 		const source = await xiu.render('route-mata', route)
-		await writeFormatFile(filePath, source, true)
+		await writeFormatFile(filePath, source, 'json')
+	}
+
+	async genVueForm(config: ModuleConfig, fields: FieldSchema[]) {
+		const filePath = join(this.#moduleDir, 'form.vue')
+		const source = await xiu.render('form-vue', {
+			name: config.name,
+			comment: config.comment,
+			fields: fields.map(f => ({
+				...f,
+				isNumber: f.type === 'number',
+				isString: f.type === 'string'
+			}))
+		})
+		await writeFormatFile(filePath, source, 'vue')
 	}
 
 	async genTsFile(fields: FieldSchema[], api: ApiServiceField[]) {

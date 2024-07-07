@@ -48,7 +48,11 @@ export function renderVueCode(
 			comment
 		}))
 		const vue = new RenderVue(config.name, config.path)
-		await Promise.all([vue.genTsFile(fields, api), vue.genRoute(route)])
+		await Promise.all([
+			vue.genTsFile(fields, api),
+			vue.genRoute(route),
+			vue.genVueForm(config, fields)
+		])
 	})
 }
 

@@ -10,14 +10,18 @@
 	watchEffect(async () => {
 		if (props.{% name %} !== null) {
 			{% name %}Id.value = props.{% name %}.id
-			{% name %}Info.value = pickerKeyVal(props.{% name %}, 'age', 'name', 'score')
+			{% name %}Info.value = pickerKeyVal(props.{% name %}
+{% for@fields %}
+, '{% $key %}'
+{% end@ %}
+)
 		}
 	})
 
-	const userFormEmit = defineEmits<{ (e: 'close', refresh: boolean): void }>()
+	const formEmit = defineEmits<{ (e: 'close', refresh: boolean): void }>()
 
 	const closeHandler = (refresh = false) => {
-		userFormEmit('close', refresh)
+		formEmit('close', refresh)
 		setTimeout(() => {
 			{% name %}Id.value = -1
 			{% name %}Info.value = {}
@@ -26,7 +30,14 @@
 
 	const updateFn = async () => {
 		if (props.{% name %} === null) {
-			{% verifyHandler %}
+{% for@fields %}
+			if (studentInfo.value.{% $key %} === undefined) {
+				showToast('缺少{% comment %}{% $comment %}')
+				return
+			}
+
+{% end@ %}
+
 			await create{% up@[name] %}({% name %}Info.value as {% up@[name] %}Dto)
 		} else {
 			await update{% up@[name] %}({% name %}Info.value, props.{% name %}.id)
@@ -43,7 +54,19 @@
 		lock-scroll
 	>
 		<el-form ref="formRef" :model="{% name %}Info" label-width="120px" class="form-detail">
-			{% formItemStr %}
+		
+{% for@fields %}
+			<el-form-item label="{% $comment %}">
+
+	{% if@$isString %}
+					<el-input v-model="{% $key %}Info.{% $key %}" />
+	{% end@ %}
+	{% if@$isNumber %}
+					<el-input-number v-model="{% $key %}Info.{% $key %}" />
+	{% end@ %}
+
+			</el-form-item>
+{% end@ %}
 		</el-form>
 		<template #footer>
 			<div class="form-form-footer">
