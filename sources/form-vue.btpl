@@ -55,10 +55,10 @@
 			<el-form-item label="{% $comment %}">
 
 	{% if@$isString %}
-					<el-input v-model="{% $key %}Info.{% $key %}" />
+					<el-input v-model="{% name %}Info.{% $key %}" />
 	{% end@ %}
 	{% if@$isNumber %}
-					<el-input-number v-model="{% $key %}Info.{% $key %}" />
+					<el-input-number v-model="{% name %}Info.{% $key %}" />
 	{% end@ %}
 
 			</el-form-item>
