@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 	import { showToast } from '@web/utils/toast'
-	import { {% up@[name] %}Dto, {% up@[name] %}Model, create{% up@[name] %}, update{% up@[name] %} } from './{% name %}'
+	import { {% up@[name] %}Dto, {% up@[name] %}Model, create{% up@[name] %}, update{% up@[name] %} } from './fetch-type'
 	import { pickerKeyVal } from '@web/utils/pickerKeyVal'
 
 	const props = defineProps<{ {% name %}: {% up@[name] %}Model | null; showForm: boolean }>()
@@ -10,11 +10,7 @@
 	watchEffect(async () => {
 		if (props.{% name %} !== null) {
 			{% name %}Id.value = props.{% name %}.id
-			{% name %}Info.value = pickerKeyVal(props.{% name %}
-{% for@fields %}
-, '{% $key %}'
-{% end@ %}
-)
+			{% name %}Info.value = pickerKeyVal(props.{% name %}{% for@fields %}, '{% $key %}'{% end@ %})
 		}
 	})
 
