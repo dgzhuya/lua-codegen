@@ -28,7 +28,7 @@ export const genLuaTypes = async (path: string) => {
 			settionObj['Lua.workspace.library'] = types.map(
 				t => `.vscode/${t}-type.lua`
 			)
-			writeFormatFile(settingPath, JSON.stringify(settionObj), true)
+			writeFormatFile(settingPath, JSON.stringify(settionObj), 'json')
 		}
 	} else {
 		writeFormatFile(
@@ -36,7 +36,7 @@ export const genLuaTypes = async (path: string) => {
 			JSON.stringify({
 				'Lua.workspace.library': types.map(t => `.vscode/${t}-type.lua`)
 			}),
-			true
+			'json'
 		)
 	}
 }
