@@ -1,11 +1,11 @@
 import { resolve } from 'path'
-import { platform } from 'os'
+import { arch, platform } from 'os'
 import { spawn } from 'child_process'
 
 const getPathName = () => {
 	switch (platform()) {
 		case 'win32':
-			return 'win/luac.exe'
+			return arch() === 'x64' ? 'win/luac.exe' : 'win/luac_32.exe'
 		case 'linux':
 			return 'linux/luac'
 		case 'darwin':
