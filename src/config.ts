@@ -3,6 +3,7 @@ import { resolve } from 'path'
 const CodegenConfig = {
 	webDir: resolve(__dirname, '..'),
 	apiDir: resolve(__dirname, '..'),
+	sqliteFile: resolve(__dirname, '..', 'admin.db'),
 	reverse: false
 }
 
@@ -15,6 +16,9 @@ export function setConfig(config: ConfigType) {
 	if (config.apiDir) {
 		CodegenConfig.apiDir = config.apiDir
 	}
+	if (config.sqliteFile) {
+		CodegenConfig.sqliteFile = config.sqliteFile
+	}
 }
 
 export const setReverse = (reverse: boolean) =>
@@ -22,4 +26,5 @@ export const setReverse = (reverse: boolean) =>
 
 export const getWebDir = () => CodegenConfig.webDir
 export const getApiDir = () => CodegenConfig.apiDir
+export const getSqliteFile = () => CodegenConfig.sqliteFile
 export const isReverse = () => CodegenConfig.reverse
