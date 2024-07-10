@@ -22,8 +22,8 @@ export function renderNestCode(
 		if (isReverse()) {
 			await Promise.all([nest.remove(), nest.editAppModule(true)])
 		} else {
+			await nest.editAppModule()
 			await Promise.all([
-				nest.editAppModule(),
 				nest.genModule(),
 				nest.genDto(dto),
 				nest.genEntity(entity),
@@ -48,11 +48,19 @@ export function renderVueCode(
 			comment
 		}))
 		const vue = new RenderVue(config.name, config.path)
-		await Promise.all([
-			vue.genTsFile(fields, api),
-			vue.genRoute(route),
-			vue.genVueForm(config, fields)
-		])
+		if (isReverse()) {
+			vue.editDir(true)
+			vue.setDatabase(route, true)
+		} else {
+			await vue.editDir()
+			await Promise.all([
+				vue.setDatabase(route),
+				vue.genTsFile(fields, api),
+				vue.genRoute(route),
+				vue.genVueForm(config, fields),
+				vue.genVueTable(config, fields)
+			])
+		}
 	})
 }
 
