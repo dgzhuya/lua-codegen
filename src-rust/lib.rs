@@ -14,7 +14,7 @@ use neige_lua::{
 use orm_lib::LuaOrmLib;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-#[wasm_bindgen(module = "@/libs")]
+#[wasm_bindgen(module = "@libs")]
 extern "C" {
     pub fn printToNode(name: &JsValue);
     pub fn renderNestCode(config: &JsValue, dto: &JsValue, entity: &JsValue, apiService: &JsValue);

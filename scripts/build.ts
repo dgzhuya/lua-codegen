@@ -65,7 +65,7 @@ build({
 						let content = readFileSync(
 							bgJsFile,
 							'utf-8'
-						).replaceAll('@/libs', './libs')
+						).replaceAll('@libs', './libs')
 						writeFileSync(
 							join(outDir, 'lua_codegen_bg.js'),
 							content
