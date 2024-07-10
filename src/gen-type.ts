@@ -4,14 +4,14 @@ import { existsSync, mkdirSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 
 export const genLuaTypes = async (path: string) => {
-	const types = ['base', 'nest', 'vue']
+	const types = ['api', 'base', 'dto', 'orm']
 	const vscodePath = join(path, '.vscode')
 	if (!existsSync(vscodePath)) {
 		mkdirSync(vscodePath)
 	}
 	const moveList = types.map(t => ({
 		writePath: join(vscodePath, `${t}-type.lua`),
-		readPath: resolve(__dirname, `../sources/${t}-type.txt`)
+		readPath: resolve(__dirname, `../sources/${t}-type.lua`)
 	}))
 	moveList.forEach(m => {
 		if (!existsSync(m.writePath)) {
