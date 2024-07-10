@@ -1,12 +1,12 @@
-import { getSqliteFile, getWebDir } from '@/config'
-import xiu from '@/render'
+import { getSqliteFile, getWebDir } from '../config'
+import xiu from '../render'
 import {
 	ApiServiceField,
 	FieldSchema,
 	ModuleConfig,
 	ModuleRoute
-} from '@/types'
-import { writeFormatFile } from '@/util'
+} from '../types'
+import { writeFormatFile } from '../util'
 import { existsSync, mkdirSync, statSync } from 'fs'
 import { readdir, rmdir, unlink } from 'fs/promises'
 import { join } from 'path'
