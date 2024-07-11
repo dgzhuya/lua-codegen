@@ -19,7 +19,6 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@biuxiu/publish": "^1.2.11",
-		"@types/better-sqlite3": "^7.6.11",
 		"@types/node": "^20.14.2",
 		"@types/shelljs": "^0.8.15",
 		"esbuild": "^0.21.5",
@@ -27,9 +26,6 @@
 		"shelljs": "^0.8.5",
 		"tsx": "^4.15.1",
 		"typescript": "^5.4.5"
-	},
-	"peerDependencies": {
-		"better-sqlite3": "^11.1.2"
 	},
 	"dependencies": {
 		"@biuxiu/template": "^1.5.2",
