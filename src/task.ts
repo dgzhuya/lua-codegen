@@ -1,5 +1,7 @@
+import { ModuleRoute } from './types'
+
 type TaskFn = {
-	(): Promise<void>
+	(): Promise<void | ModuleRoute>
 }
 
 const TaskQueue: TaskFn[] = []

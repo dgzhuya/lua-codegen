@@ -4,6 +4,7 @@ import { run } from '../pkg/lua_codegen'
 import { genLuaTypes } from './gen-type'
 import { ConfigType, setConfig, setReverse } from './config'
 import { runTask } from './task'
+import { ModuleRoute } from './types'
 
 function startRun(isDelete: boolean) {
 	return async function (filePath: string, config?: ConfigType) {
@@ -13,7 +14,7 @@ function startRun(isDelete: boolean) {
 			try {
 				const data = await compileToByte(filePath)
 				run(new Uint8Array(data), filePath)
-				await runTask()
+				return (await runTask()).filter(c => !!c) as ModuleRoute[]
 			} catch (error) {
 				return Promise.reject(error)
 			}
